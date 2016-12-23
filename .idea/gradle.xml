@@ -9,7 +9,9 @@
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/app" />
+            <option value="$PROJECT_DIR$/develpeutils" />
             <option value="$PROJECT_DIR$/motionlayout" />
+            <option value="$PROJECT_DIR$/mutiimageview" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />

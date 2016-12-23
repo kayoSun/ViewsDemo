@@ -22,8 +22,8 @@ public class UIUtils {
 
     /**
      * dp转px
-     * @param dipValue
-     * @return
+     * @param dipValue 需要转换的值
+     * @return 转换后的值
      */
     public static int dip2px(Context context,float dipValue) {
         float scale = getDensity(context);
@@ -32,9 +32,9 @@ public class UIUtils {
 
     /**
      * dp转px 并按比例放大
-     * @param dipValue
-     * @param toscale
-     * @return
+     * @param dipValue 需要转换的值
+     * @param toscale 转换倍数
+     * @return 转换后的值
      */
     public static int dip2px(Context context,float dipValue, float toscale) {
         float scale = getDensity(context);
@@ -42,8 +42,8 @@ public class UIUtils {
     }
     /**
      * px转dp
-     * @param pxValue
-     * @return
+     * @param pxValue 需要转换的值
+     * @return 转换后的值
      */
     public static int px2dip(Context context,float pxValue) {
         float scale = getDensity(context);
@@ -53,8 +53,8 @@ public class UIUtils {
     /**
      * 将px值转换为sp值，保证文字大小不变
      *
-     * @param pxValue
-     * @return
+     * @param pxValue 需要转换的值
+     * @return 转换后的值
      */
     public static int px2sp(Context context,float pxValue) {
         float scale = getDensity(context);
@@ -64,8 +64,8 @@ public class UIUtils {
     /**
      * 将sp值转换为px值，保证文字大小不变
      *
-     * @param spValue
-     * @return
+     * @param spValue 需要转换的值
+     * @return 转换后的值
      */
     public static int sp2px(Context context,float spValue) {
         float scale = getDensity(context);

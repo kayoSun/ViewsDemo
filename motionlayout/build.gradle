@@ -1,5 +1,5 @@
 apply plugin: 'com.android.library'
-apply plugin: 'com.novoda.bintray-release'
+//apply plugin: 'com.novoda.bintray-release'
 android {
     compileSdkVersion 25
     buildToolsVersion "25.0.1"
@@ -25,18 +25,6 @@ android {
     }
 }
 
-allprojects {
-    repositories {
-        jcenter()
-    }
-    //加上这些
-    tasks.withType(Javadoc) {
-        options{ encoding "UTF-8"
-            charSet 'UTF-8'
-            links "http://docs.oracle.com/javase/7/docs/api"
-        }
-    }
-}
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
@@ -46,11 +34,11 @@ dependencies {
     testCompile 'junit:junit:4.12'
     compile 'com.android.support:recyclerview-v7:25.0.1'
 }
-publish {
-    userOrg = 'kayosun'      //bintray注册的用户名
-    groupId = 'com.kayo'         //compile引用时的第1部分groupId
-    artifactId = 'MotionLayout'     //compile引用时的第2部分项目名
-    publishVersion = '1.0.0'    //compile引用时的第3部分版本号
-    desc = 'This is a layout for motion like pull to refresh or push to load more date extend library '
-    website = 'https://github.com/wzgiceman/Rxbus'
-}
+//publish {
+//    userOrg = 'kayosun'
+//    groupId = 'com.kayo'
+//    artifactId = 'MotionLayout'
+//    publishVersion = '1.0.0'
+//    desc = 'This is a layout for motion like pull to refresh or push to load more date extend library '
+//    website = 'https://github.com/kayoSun/ViewsDemo'
+//}

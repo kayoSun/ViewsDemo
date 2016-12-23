@@ -1,15 +1,17 @@
-apply plugin: 'com.android.application'
-
+apply plugin: 'com.android.library'
+//apply plugin: 'com.novoda.bintray-release'
 android {
     compileSdkVersion 25
     buildToolsVersion "25.0.1"
+
     defaultConfig {
-        applicationId "com.kayo.viewsdemo"
         minSdkVersion 19
         targetSdkVersion 25
         versionCode 1
         versionName "1.0"
+
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
     }
     buildTypes {
         release {
@@ -23,15 +25,19 @@ android {
 }
 
 dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
+    compile fileTree(dir: 'libs', include: ['*.jar'])
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
     compile 'com.android.support:appcompat-v7:25.0.1'
     testCompile 'junit:junit:4.12'
-    //    compile project(':motionlayout')
-    compile 'com.android.support:recyclerview-v7:25.0.1'
-    compile project(':mutiimageview')
-    compile 'com.kayo:MotionLayout:1.0.0'
-    compile project(':develpeutils')
 }
+
+//publish {
+//    userOrg = 'kayosun'
+//    groupId = 'com.kayo'
+//    artifactId = 'MutiImageView'
+//    publishVersion = '1.0.0'
+//    desc = 'This is a ImageView for Round like circle or receangle extend library '
+//    website = 'https://github.com/kayoSun/ViewsDemo'
+//}

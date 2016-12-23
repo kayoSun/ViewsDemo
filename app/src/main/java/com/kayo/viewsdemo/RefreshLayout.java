@@ -29,7 +29,7 @@ import com.kayo.motionlayout.UIUtils;
  * Created by shilei on 16/12/22.
  * <pre>
  *
- * <pre>
+ * </pre>
  */
 
 public class RefreshLayout extends ViewGroup {

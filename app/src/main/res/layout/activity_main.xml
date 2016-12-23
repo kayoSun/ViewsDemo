@@ -1,15 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.kayo.motionlayout.MotionLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/motion_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.kayo.viewsdemo.MainActivity">
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recycler_view"
-        android:background="#00f"
+    <com.kayo.motionlayout.MotionLayout
+        android:id="@+id/motion_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent">
 
-</com.kayo.motionlayout.MotionLayout>
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#00f" />
+
+    </com.kayo.motionlayout.MotionLayout>
+
+    <TextView
+        android:id="@+id/text"
+        android:background="#777"
+        android:textColor="#fff"
+        android:layout_width="match_parent"
+        android:layout_height="300dp" />
+</RelativeLayout>
+

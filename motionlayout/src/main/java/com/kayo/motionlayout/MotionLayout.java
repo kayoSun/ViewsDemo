@@ -27,7 +27,7 @@ import java.util.List;
  * Created by shilei on 16/12/22.
  * <pre>
  *
- * <pre>
+ * </pre>
  */
 public class MotionLayout extends ViewGroup {
     private int HEADER_VIEW_HEIGHT = 200;// HeaderView height (dp) 头布局高度
@@ -116,7 +116,7 @@ public class MotionLayout extends ViewGroup {
     /**
      * 添加头布局
      *
-     * @param child
+     * @param child 子控件
      */
     public void setHeaderView(View child) {
         if (child == null) {
@@ -189,7 +189,6 @@ public class MotionLayout extends ViewGroup {
 
     /**
      * 判断目标View是否滑动到顶部-还能否继续滑动
-     * @return
      */
     public boolean isChildScrollToTop() {
         if (autoCheck) {
@@ -219,7 +218,6 @@ public class MotionLayout extends ViewGroup {
 
     /**
      * 判断目标View是否滑动到底部-还能否继续滑动
-     * @return
      */
     public boolean isChildScrollToBottom() {
         return false;

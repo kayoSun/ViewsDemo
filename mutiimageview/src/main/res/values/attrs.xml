@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="MutiImageView">
+        <!--左上圆角-->
+        <attr name="top_left" format="dimension"/>
+        <!--左下圆角-->
+        <attr name="bottom_left" format="dimension"/>
+        <!--右上圆角-->
+        <attr name="top_right" format="dimension"/>
+        <!--右下圆角-->
+        <attr name="bottom_right" format="dimension"/>
+        <!--设置控件 样式-->
+        <attr name="style" format="enum">
+            <enum name="circle" value="0"/>
+            <enum name="rectangle" value="1"/>
+        </attr>
+    </declare-styleable>
+
+</resources>
