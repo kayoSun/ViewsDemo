@@ -17,11 +17,12 @@ import java.util.List;
 /**
  * Created by shilei on 17/1/19.
  * <pre>
- *
+ *      条目动画基类
+ *      处理条目的动画展示逻辑
  * </pre>
  */
 
-public abstract class BaseItemAnimator extends SimpleItemAnimator implements IAnimateHolder {
+public abstract class BaseItemAnimator extends SimpleItemAnimator{
 
     private List<ViewHolder> removeHolders = new ArrayList<>();//移除列表
     private List<ViewHolder> addHolders = new ArrayList<>();//添加列表
@@ -298,15 +299,6 @@ public abstract class BaseItemAnimator extends SimpleItemAnimator implements IAn
         return false;
     }
 
-    @Override
-    public void preAnimateAddImpl(ViewHolder holder) {
-
-    }
-
-    @Override
-    public void preAnimateRemoveImpl(ViewHolder holder) {
-
-    }
 
     private void animateChangeImpl(final ChangeInfo changeInfo){
         final ViewHolder holder = changeInfo.oldHolder;
@@ -405,8 +397,30 @@ public abstract class BaseItemAnimator extends SimpleItemAnimator implements IAn
         }).start();
     }
 
-    protected abstract void animateAddImpl(ViewHolder holder);
+    /**
+     * 添加动画执行前
+     * @param holder
+     */
+    public void preAnimateAddImpl(ViewHolder holder) {
 
+    }
+    /**
+     * 删除动画执行前
+     * @param holder
+     */
+    public void preAnimateRemoveImpl(ViewHolder holder) {
+
+    }
+
+    /**
+     * 添加动画执行时
+     * @param holder
+     */
+    protected abstract void animateAddImpl(ViewHolder holder);
+    /**
+     * 删除动画执行时
+     * @param holder
+     */
     protected abstract void animateRemoveImpl(ViewHolder holder);
 
     //启动删除条目动画

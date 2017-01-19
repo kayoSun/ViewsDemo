@@ -35,7 +35,7 @@ dependencies {
 //publish {
 //    userOrg = 'kayosun'
 //    groupId = 'com.kayo'
-//    artifactId = 'AnimatorForRecyclerView'
+//    artifactId = 'AnimationForRecyclerView'
 //    publishVersion = '1.0.0'
 //    desc = 'This is Libs about item animator for recyclerview extend library '
 //    website = 'https://github.com/kayoSun/ViewsDemo'

@@ -68,8 +68,10 @@ public class MainActivity extends AppCompatActivity {
         DemoAdapter demoAdapter = new DemoAdapter(this);
         demoAdapter.setData(dataList);
 
-//        SacaleAdapter sacaleAdapter = new SacaleAdapter(demoAdapter);
+        //启用动画适配器
+
         SlideAdapter slideAdapter = new SlideAdapter(demoAdapter,SlideAdapter.BOTTOM);
+//        SacaleAdapter sacaleAdapter = new SacaleAdapter(demoAdapter);
         slideAdapter.setDuration(500);
         listView.setAdapter(slideAdapter);
     }
