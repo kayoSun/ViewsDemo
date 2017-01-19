@@ -10,19 +10,14 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/recycler_view"
+        <com.kayo.mutiadapter.MutiListView
+            android:id="@+id/list_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="#00f" />
 
     </com.kayo.motionlayout.MotionLayout>
 
-    <TextView
-        android:id="@+id/text"
-        android:background="#777"
-        android:textColor="#fff"
-        android:layout_width="match_parent"
-        android:layout_height="300dp" />
+
 </RelativeLayout>
 

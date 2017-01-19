@@ -29,9 +29,12 @@ dependencies {
     })
     compile 'com.android.support:appcompat-v7:25.0.1'
     testCompile 'junit:junit:4.12'
-    //    compile project(':motionlayout')
     compile 'com.android.support:recyclerview-v7:25.0.1'
-    compile project(':mutiimageview')
-    compile 'com.kayo:MotionLayout:1.0.0'
+//    compile 'com.kayo:MotionLayout:1.0.0'
+//    compile 'com.kayo:MutiImageView:1.0.1'
     compile project(':develpeutils')
+    compile project(':motionlayout')
+    compile project(':mutiimageview')
+    compile project(':mutirecyclerview')
+    compile project(':animators_recyclerview')
 }

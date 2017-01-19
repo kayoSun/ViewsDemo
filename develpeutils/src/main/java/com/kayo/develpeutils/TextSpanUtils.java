@@ -45,19 +45,20 @@ import android.text.style.UnderlineSpan;
  *          setFlag           : 设置标识
  *          setForegroundColor: 设置前景色
  *          setBackgroundColor: 设置背景色
+ *          setRundBackground : 设置圆角背景
  *          setQuoteColor     : 设置引用线的颜色
  *          setLeadingMargin  : 设置缩进
  *          setBullet         : 设置列表标记
- *          setProportion     : 设置字体比例
- *          setXProportion    : 设置字体横向比例
- *          setStrikethrough  : 设置删除线
+ *          setScale     : 设置字体比例
+ *          setXScale    : 设置字体横向比例
+ *          setDeleteLine     : 设置删除线
  *          setUnderline      : 设置下划线
- *          setSuperscript    : 设置上标
- *          setSubscript      : 设置下标
+ *          setUpperMark      : 设置上标
+ *          setDownMark       : 设置下标
  *          setBold           : 设置粗体
  *          setItalic         : 设置斜体
  *          setBoldItalic     : 设置粗斜体
- *          setFontFamily     : 设置字体
+ *          setFont           : 设置字体
  *          setAlign          : 设置对齐
  *          setBitmap         : 设置图片
  *          setDrawable       : 设置图片
@@ -68,17 +69,17 @@ import android.text.style.UnderlineSpan;
  *          setBlur           : 设置模糊
  *          append            : 追加样式字符串
  *          create            : 创建样式字符串
- *
  * </pre>
  */
 
-public class SpannableStringUtils {
+public class TextSpanUtils {
 
-    private SpannableStringUtils() {
+    private TextSpanUtils() {
     }
 
     /**
      * 获取建造者
+     *
      * @param text 样式字符串文本
      * @return {@link Builder}
      */
@@ -87,7 +88,7 @@ public class SpannableStringUtils {
     }
 
     public static class Builder {
-
+        private Context context;
         private int defaultValue = 0x12000000;
         private CharSequence text;
 
@@ -107,19 +108,19 @@ public class SpannableStringUtils {
         private int gapWidth;
         private int bulletColor;
 
-        private float proportion;
+        private float scale;
         private float xProportion;
-        private boolean isStrikethrough;
+        private boolean isDeleteLine;
         private boolean isUnderline;
-        private boolean isSuperscript;
-        private boolean isSubscript;
+        private boolean isUpperMark;
+        private boolean isDownMark;
         private boolean isBold;
         private boolean isItalic;
         private boolean isBoldItalic;
         private String fontFamily;
         private Layout.Alignment align;
 
-
+        //设置 图片
         private boolean imageIsBitmap;
         private Bitmap bitmap;
         private boolean imageIsDrawable;
@@ -130,21 +131,24 @@ public class SpannableStringUtils {
         @DrawableRes
         private int resourceId;
 
+        //设置圆角背景
         private boolean isRoundImageSpan;//是否需要圆角背景
-        private int roundColor =-1;
+        @ColorInt
+        private int roundColor = -1;
         private int roundRadius = 0;
+        private int offsetX=0;
+        private int offsetY=0;
 
+        //设置可点击超链接
         private ClickableSpan clickSpan;
         private String url;
 
+        //设置模糊
         private boolean isBlur;
         private float radius;
         private BlurMaskFilter.Blur style;
 
         private SpannableStringBuilder mBuilder;
-        private SpannableString spannableString;
-
-        private Context context;
 
         private Builder(Context context, @NonNull CharSequence text) {
             this.text = text;
@@ -153,13 +157,14 @@ public class SpannableStringUtils {
             foregroundColor = defaultValue;
             backgroundColor = defaultValue;
             quoteColor = defaultValue;
-            proportion = -1;
+            scale = -1;
             xProportion = -1;
             mBuilder = new SpannableStringBuilder();
         }
 
         /**
          * 设置标识
+         *
          * @param flag <ul>
          *             <li>{@link Spanned#SPAN_INCLUSIVE_EXCLUSIVE}</li>
          *             <li>{@link Spanned#SPAN_INCLUSIVE_INCLUSIVE}</li>
@@ -175,6 +180,7 @@ public class SpannableStringUtils {
 
         /**
          * 设置前景色
+         *
          * @param color 前景色
          * @return {@link Builder}
          */
@@ -185,6 +191,7 @@ public class SpannableStringUtils {
 
         /**
          * 设置背景色
+         *
          * @param color 背景色
          * @return {@link Builder}
          */
@@ -193,10 +200,19 @@ public class SpannableStringUtils {
             return this;
         }
 
-        public Builder setRundBackground(@ColorInt int color,int round){
-            isRoundImageSpan  = true;
+        /**
+         * 设置圆角背景
+         * @param color 颜色
+         * @param round 圆角大小
+         * @param offsetX X修正
+         * @param offsetY Y修正
+         */
+        public Builder setRundBackground(@ColorInt int color, int round,int offsetX,int offsetY) {
+            isRoundImageSpan = true;
             roundColor = color;
             roundRadius = round;
+            this.offsetX = offsetX;
+            this.offsetY = offsetY;
             return this;
         }
 
@@ -212,6 +228,7 @@ public class SpannableStringUtils {
 
         /**
          * 设置缩进
+         *
          * @param first 首行缩进
          * @param rest  剩余行缩进
          * @return {@link Builder}
@@ -225,6 +242,7 @@ public class SpannableStringUtils {
 
         /**
          * 设置列表标记
+         *
          * @param gapWidth 列表标记和文字间距离
          * @param color    列表标记的颜色
          * @return {@link Builder}
@@ -238,35 +256,39 @@ public class SpannableStringUtils {
 
         /**
          * 设置字体比例
-         * @param proportion 比例
+         *
+         * @param scale 比例
          * @return {@link Builder}
          */
-        public Builder setProportion(float proportion) {
-            this.proportion = proportion;
+        public Builder setScale(float scale) {
+            this.scale = scale;
             return this;
         }
 
         /**
          * 设置字体横向比例
+         *
          * @param proportion 比例
          * @return {@link Builder}
          */
-        public Builder setXProportion(float proportion) {
+        public Builder setXScale(float proportion) {
             this.xProportion = proportion;
             return this;
         }
 
         /**
          * 设置删除线
+         *
          * @return {@link Builder}
          */
-        public Builder setStrikethrough() {
-            this.isStrikethrough = true;
+        public Builder setDeleteLine() {
+            this.isDeleteLine = true;
             return this;
         }
 
         /**
          * 设置下划线
+         *
          * @return {@link Builder}
          */
         public Builder setUnderline() {
@@ -276,24 +298,27 @@ public class SpannableStringUtils {
 
         /**
          * 设置上标
+         *
          * @return {@link Builder}
          */
-        public Builder setSuperscript() {
-            this.isSuperscript = true;
+        public Builder setUpperMark() {
+            this.isUpperMark = true;
             return this;
         }
 
         /**
          * 设置下标
+         *
          * @return {@link Builder}
          */
-        public Builder setSubscript() {
-            this.isSubscript = true;
+        public Builder setDownMark() {
+            this.isDownMark = true;
             return this;
         }
 
         /**
          * 设置粗体
+         *
          * @return {@link Builder}
          */
         public Builder setBold() {
@@ -303,6 +328,7 @@ public class SpannableStringUtils {
 
         /**
          * 设置斜体
+         *
          * @return {@link Builder}
          */
         public Builder setItalic() {
@@ -312,6 +338,7 @@ public class SpannableStringUtils {
 
         /**
          * 设置粗斜体
+         *
          * @return {@link Builder}
          */
         public Builder setBoldItalic() {
@@ -321,6 +348,7 @@ public class SpannableStringUtils {
 
         /**
          * 设置字体
+         *
          * @param fontFamily 字体
          *                   <ul>
          *                   <li>monospace</li>
@@ -329,13 +357,14 @@ public class SpannableStringUtils {
          *                   </ul>
          * @return {@link Builder}
          */
-        public Builder setFontFamily(@Nullable String fontFamily) {
+        public Builder setFont(@Nullable String fontFamily) {
             this.fontFamily = fontFamily;
             return this;
         }
 
         /**
          * 设置对齐
+         *
          * @param align 对其方式
          *              <ul>
          *              <li>{@link Layout.Alignment#ALIGN_NORMAL}正常</li>
@@ -351,6 +380,7 @@ public class SpannableStringUtils {
 
         /**
          * 设置图片
+         *
          * @param bitmap 图片位图
          * @return {@link Builder}
          */
@@ -362,6 +392,7 @@ public class SpannableStringUtils {
 
         /**
          * 设置图片
+         *
          * @param drawable 图片资源
          * @return {@link Builder}
          */
@@ -373,6 +404,7 @@ public class SpannableStringUtils {
 
         /**
          * 设置图片
+         *
          * @param uri 图片uri
          * @return {@link Builder}
          */
@@ -384,6 +416,7 @@ public class SpannableStringUtils {
 
         /**
          * 设置图片
+         *
          * @param resourceId 图片资源id
          * @return {@link Builder}
          */
@@ -431,7 +464,7 @@ public class SpannableStringUtils {
          *               </ul>
          * @return {@link Builder}
          */
-        public Builder setBlur(float radius, BlurMaskFilter.Blur style) {
+        public Builder setBlur(float radius,BlurMaskFilter.Blur style) {
             this.radius = radius;
             this.style = style;
             this.isBlur = true;
@@ -440,6 +473,7 @@ public class SpannableStringUtils {
 
         /**
          * 追加样式字符串
+         *
          * @param text 样式字符串文本
          * @return {@link Builder}
          */
@@ -451,6 +485,7 @@ public class SpannableStringUtils {
 
         /**
          * 创建样式字符串
+         *
          * @return 样式字符串
          */
         public SpannableStringBuilder create() {
@@ -463,8 +498,22 @@ public class SpannableStringUtils {
          */
         private void setSpan() {
             int start = mBuilder.length();
-            mBuilder.append(this.text);
-            int end = mBuilder.length();
+            int end =0;
+
+            if (isRoundImageSpan) {//设置 圆角 背景
+                SpannableString spannableString = new SpannableString(text);
+                end = spannableString.length();
+                TagImageSpan tagImageSpan = new TagImageSpan(10, 10);
+                tagImageSpan.setOffsetX(offsetX);
+                tagImageSpan.setOffsetY(offsetY);
+                spannableString.setSpan(tagImageSpan, 0, spannableString.length(), flag);
+                mBuilder.append(spannableString);
+                isRoundImageSpan = false;
+            }else {
+                mBuilder.append(this.text);
+                end = mBuilder.length();
+            }
+
             if (foregroundColor != defaultValue) {
                 mBuilder.setSpan(new ForegroundColorSpan(foregroundColor), start, end, flag);
                 foregroundColor = defaultValue;
@@ -485,29 +534,29 @@ public class SpannableStringUtils {
                 mBuilder.setSpan(new BulletSpan(gapWidth, bulletColor), start, end, 0);
                 isBullet = false;
             }
-            if (proportion != -1) {
-                mBuilder.setSpan(new RelativeSizeSpan(proportion), start, end, flag);
-                proportion = -1;
+            if (scale != -1) {
+                mBuilder.setSpan(new RelativeSizeSpan(scale), start, end, flag);
+                scale = -1;
             }
             if (xProportion != -1) {
                 mBuilder.setSpan(new ScaleXSpan(xProportion), start, end, flag);
                 xProportion = -1;
             }
-            if (isStrikethrough) {
+            if (isDeleteLine) {
                 mBuilder.setSpan(new StrikethroughSpan(), start, end, flag);
-                isStrikethrough = false;
+                isDeleteLine = false;
             }
             if (isUnderline) {
                 mBuilder.setSpan(new UnderlineSpan(), start, end, flag);
                 isUnderline = false;
             }
-            if (isSuperscript) {
+            if (isUpperMark) {
                 mBuilder.setSpan(new SuperscriptSpan(), start, end, flag);
-                isSuperscript = false;
+                isUpperMark = false;
             }
-            if (isSubscript) {
+            if (isDownMark) {
                 mBuilder.setSpan(new SubscriptSpan(), start, end, flag);
-                isSubscript = false;
+                isDownMark = false;
             }
             if (isBold) {
                 mBuilder.setSpan(new StyleSpan(Typeface.BOLD), start, end, flag);
@@ -560,16 +609,11 @@ public class SpannableStringUtils {
                 mBuilder.setSpan(new MaskFilterSpan(new BlurMaskFilter(radius, style)), start, end, flag);
                 isBlur = false;
             }
-            if (isRoundImageSpan){//设置 圆角 背景
-                spannableString = new SpannableString(text);
-                TagImageSpan tagImageSpan = new TagImageSpan(0, 0);
-                spannableString.setSpan(tagImageSpan, start, end, flag);
-                mBuilder.append(spannableString);
-                isRoundImageSpan = false;
-            }
+
             flag = Spanned.SPAN_EXCLUSIVE_EXCLUSIVE;
 
         }
+
         /**
          * 生成shape 可以通过xml实现
          */
@@ -582,20 +626,14 @@ public class SpannableStringUtils {
             return drawable;
         }
 
-        class TagImageSpan extends ImageSpan {
+        private class TagImageSpan extends ImageSpan {
 
-            public int expandWidth = 0; //设置之后可能会出现显示不全的问题，可通过TextView的 padding解决
-            public int expandHeight = 0;//设置之后可能会出现显示不全的问题，可通过TextView的 padding解决
+            private int expandWidth = 0; //设置之后可能会出现显示不全的问题，可通过TextView的 padding解决
+            private int expandHeight = 0;//设置之后可能会出现显示不全的问题，可通过TextView的 padding解决
             private int offsetY = 0; //Y轴偏移量
             private int offsetX = 0; //X轴偏移量
-            private int textOffsetY = -1;//文字X轴偏移量
-            private int textOffsetX = 0;//文字Y轴偏移量
 
-            public TagImageSpan() {
-                this( 0, 0);
-            }
-
-            public TagImageSpan( int expandWidth, int expandHeight) {
+            TagImageSpan(int expandWidth, int expandHeight) {
                 super(getShape());
                 this.expandWidth = expandWidth;
                 this.expandHeight = expandHeight;
@@ -607,7 +645,7 @@ public class SpannableStringUtils {
                 int height = getHeight(paint);
                 getDrawable().setBounds(0, 0, width, height);
                 float bgX = x + offsetX - (expandWidth * 0.5F); //使得在水平方向居中
-                int bgBottom = bottom +offsetY + expandHeight / 2;//使得在垂直方向居中
+                int bgBottom = bottom + offsetY + expandHeight / 2;//使得在垂直方向居中
                 super.draw(canvas, text, start, end, bgX, top, y, bgBottom, paint);
                 paint.setColor(Color.WHITE);
                 canvas.drawText(text.subSequence(start, end).toString(), x, y, paint);
@@ -618,11 +656,11 @@ public class SpannableStringUtils {
                 return getWidth(text, start, end, paint);
             }
 
-            public void setOffsetY(int offsetY) {
+            void setOffsetY(int offsetY) {
                 this.offsetY = offsetY;
             }
 
-            public void setOffsetX(int offsetX) {
+            void setOffsetX(int offsetX) {
                 this.offsetX = offsetX;
             }
 

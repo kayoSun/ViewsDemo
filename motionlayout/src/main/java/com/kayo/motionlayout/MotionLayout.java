@@ -6,9 +6,12 @@ import android.os.Build;
 import android.os.Handler;
 import android.support.v4.view.MotionEventCompat;
 import android.support.v4.view.ViewCompat;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Display;
 import android.view.MotionEvent;
 import android.view.View;
@@ -58,11 +61,14 @@ public class MotionLayout extends ViewGroup {
     // RefreshLayout内的目标View，比如RecyclerView,ListView
     private View motionView;
     private HeaderViewContainer headContainer;
+    private FooterViewContainer footContainer;
 
     private int mFrom;
     private int mOriginalOffsetTop;
     private int headerHeight;
     private int headerWidth;// headerView的宽度
+    private int footerHeight;
+    private int footerWidth;
     private int pushDistance = 0;//下拉距离
     // 最后停顿时的偏移量px，与DEFAULT_CIRCLE_TARGET正比
     private float mSpinnerFinalOffset;
@@ -97,9 +103,12 @@ public class MotionLayout extends ViewGroup {
         Display display = wm.getDefaultDisplay();
         final DisplayMetrics metrics = getResources().getDisplayMetrics();
         headerWidth = display.getWidth();
+        footerWidth = display.getWidth();
         //headerHeight = (int) (HEADER_VIEW_HEIGHT * metrics.density);
         headerHeight = UIUtils.dip2px(getContext(), HEADER_VIEW_HEIGHT * metrics.density);
+        footerHeight = UIUtils.dip2px(getContext(), HEADER_VIEW_HEIGHT * metrics.density);
         createHeaderViewContainer();
+        createFooterViewContainer();
         ViewCompat.setChildrenDrawingOrderEnabled(this, true);
         mSpinnerFinalOffset = DEFAULT_CIRCLE_TARGET * metrics.density;
         mTotalDragDistance = mSpinnerFinalOffset;
@@ -107,12 +116,14 @@ public class MotionLayout extends ViewGroup {
 
     /**
      * 设置回跳刷新高度
+     *
      * @param refreshHeight 刷新时的展示高度
      */
-    public void setRefreshHeight(int refreshHeight){
+    public void setRefreshHeight(int refreshHeight) {
         this.DEFAULT_CIRCLE_TARGET = refreshHeight;
     }
     //==================头布局 相关======================
+
     /**
      * 添加头布局
      *
@@ -147,6 +158,12 @@ public class MotionLayout extends ViewGroup {
         headContainer = new HeaderViewContainer(getContext());
         headContainer.setVisibility(View.GONE);
         addView(headContainer);
+    }
+    //创建脚布局容器
+    private void createFooterViewContainer(){
+        footContainer = new FooterViewContainer(getContext());
+        footContainer.setVisibility(GONE);
+        addView(footContainer);
     }
 
     private void setRefreshing(boolean refreshing, final boolean notify) {
@@ -192,17 +209,6 @@ public class MotionLayout extends ViewGroup {
      */
     public boolean isChildScrollToTop() {
         if (autoCheck) {
-//            if (Build.VERSION.SDK_INT < 14) {
-//                if (motionView instanceof AbsListView) {
-//                    final AbsListView absListView = (AbsListView) motionView;
-//                    return !(absListView.getChildCount() > 0 && (absListView
-//                            .getFirstVisiblePosition() > 0 || absListView
-//                            .getChildAt(0).getTop() < absListView.getPaddingTop()));
-//                } else {
-//                    return !(motionView.getScrollY() > 0);
-//                }
-//            } else
-//            {
             boolean isChildScrollToTop = false;
             if (motionView instanceof RecyclerView) {
                 isChildScrollToTop = !(((RecyclerView) motionView).computeVerticalScrollOffset() > 0);
@@ -220,15 +226,31 @@ public class MotionLayout extends ViewGroup {
      * 判断目标View是否滑动到底部-还能否继续滑动
      */
     public boolean isChildScrollToBottom() {
+        if (motionView instanceof RecyclerView) {
+            RecyclerView recyclerView = (RecyclerView) motionView;
+            RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();
+            int count = recyclerView.getAdapter().getItemCount();
+            if (layoutManager instanceof LinearLayoutManager && count > 0) {
+                LinearLayoutManager linearLayoutManager = (LinearLayoutManager) layoutManager;
+                if (linearLayoutManager.findLastCompletelyVisibleItemPosition() == count - 1) {
+                    System.out.println("MotionLayout --> " + "到底");
+                    return true;
+                }
+                System.out.println("MotionLayout --> " + "item = "+linearLayoutManager.findLastCompletelyVisibleItemPosition());
+            }
+            return false;
+        }
         return false;
     }
 
     public void isTop(boolean isTop) {
         this.isTop = isTop;
     }
+
     public boolean isTop() {
         return isTop;
     }
+
     /**
      * 设置是否自动检测  到顶状态
      *
@@ -368,7 +390,7 @@ public class MotionLayout extends ViewGroup {
         if (motionView == null) {
             for (int i = 0; i < getChildCount(); i++) {
                 View child = getChildAt(i);
-                if (!child.equals(headContainer)) {
+                if (!(child instanceof HeaderViewContainer) && !(child instanceof FooterViewContainer)){
                     motionView = child;
                     break;
                 }
@@ -381,6 +403,7 @@ public class MotionLayout extends ViewGroup {
                             int bottom) {
         final int width = getMeasuredWidth();
         final int height = getMeasuredHeight();
+        System.out.println("MotionLayout --> " + "left = "+left+"    right = "+right +"    width = "+width);
         if (getChildCount() == 0) {
             return;
         }
@@ -400,9 +423,17 @@ public class MotionLayout extends ViewGroup {
                 + childHeight);// 更新目标View的位置
         int headViewWidth = headContainer.getMeasuredWidth();
         int headViewHeight = headContainer.getMeasuredHeight();
+
+
         headContainer.layout((width / 2 - headViewWidth / 2),
                 motionViewOffsetTop, (width / 2 + headViewWidth / 2),
                 motionViewOffsetTop + headViewHeight);// 更新头布局的位置
+
+        int footerL = 0;
+        int footerT = height - pushDistance;
+        int footerR = footContainer.getMeasuredWidth();
+        int footerB = height+footContainer.getMeasuredHeight()-pushDistance;
+        footContainer.layout(footerL,footerT,footerR,footerB);
     }
 
     @Override
@@ -420,6 +451,10 @@ public class MotionLayout extends ViewGroup {
         headContainer.measure(
                 MeasureSpec.makeMeasureSpec(headerWidth, MeasureSpec.EXACTLY),
                 MeasureSpec.makeMeasureSpec(headerHeight, MeasureSpec.EXACTLY));
+        footContainer.measure(
+                MeasureSpec.makeMeasureSpec(footerWidth, MeasureSpec.EXACTLY),
+                MeasureSpec.makeMeasureSpec(footerHeight, MeasureSpec.EXACTLY));
+
 
         if (!mOriginalOffsetCalculated) {
             mOriginalOffsetCalculated = true;
@@ -470,13 +505,19 @@ public class MotionLayout extends ViewGroup {
                     return false;
                 }
                 //下拉 操作
-                if (isChildScrollToTop()){
+                if (isChildScrollToTop()) {
                     float yDiff = y - mInitialMotionY;// 计算下拉距离
                     if (yDiff > touchSlop && !mIsBeingDragged) {// 判断是否下拉的距离足够
                         mIsBeingDragged = true;// 正在下拉
                     }
                 }
                 //上拉 操作
+                if (isChildScrollToBottom()){
+                    float yDiff = mInitialMotionY - y;// 计算上拉距离
+                    if (yDiff > touchSlop && !mIsBeingDragged) {// 判断是否下拉的距离足够
+                        mIsBeingDragged = true;// 正在上拉
+                    }
+                }
 
                 break;
             case MotionEventCompat.ACTION_POINTER_UP:
@@ -517,13 +558,11 @@ public class MotionLayout extends ViewGroup {
         }
         if (isChildScrollToTop()) {//如果是上 顶部
             return handlerPullTouchEvent(ev, action);
-        }else
-        if (isChildScrollToBottom()) {//如果是下 底部
+        } else if (isChildScrollToBottom()) {//如果是下 底部
+            System.out.println("MotionLayout --> " + "上拉");
             return handlerPushTouchEvent(ev, action);
         }
         return false;
-
-//        return isChildScrollToTop() && handlerPullTouchEvent(ev, action);
     }
 
     //解析下拉动作
@@ -571,8 +610,7 @@ public class MotionLayout extends ViewGroup {
                     } else {
                         notifyPullEnable(true);
                     }
-                    setTargetOffsetTop(targetY - motionViewOffsetTop,
-                            true);
+                    setTargetOffsetTop(targetY - motionViewOffsetTop, true);
                 }
                 break;
             }
@@ -632,9 +670,22 @@ public class MotionLayout extends ViewGroup {
     private boolean handlerPushTouchEvent(MotionEvent ev, int action) {
         switch (action) {
             case MotionEvent.ACTION_DOWN:
+                mActivePointerId = MotionEventCompat.getPointerId(ev, 0);
+                mIsBeingDragged = false;
                 break;
-
             case MotionEvent.ACTION_MOVE:
+                final int pointerIndex = MotionEventCompat.findPointerIndex(ev,
+                        mActivePointerId);
+                if (pointerIndex < 0) {
+                    return false;
+                }
+                final float y = MotionEventCompat.getY(ev, pointerIndex);
+                final float overscrollBottom = (mInitialMotionY - y) * DRAG_RATE;
+                if (mIsBeingDragged) {
+                    pushDistance = (int) overscrollBottom;
+                    updateFooterViewPosition();
+                }
+
                 break;
             case MotionEventCompat.ACTION_POINTER_DOWN:
                 break;
@@ -647,6 +698,17 @@ public class MotionLayout extends ViewGroup {
             }
         }
         return true;
+    }
+
+    private void updateFooterViewPosition() {
+        footContainer.setVisibility(View.VISIBLE);
+        footContainer.bringToFront();
+        //针对4.4及之前版本的兼容
+        if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.KITKAT) {
+            footContainer.getParent().requestLayout();
+        }
+        footContainer.offsetTopAndBottom(-pushDistance);
+
     }
 
     /**
@@ -722,6 +784,10 @@ public class MotionLayout extends ViewGroup {
             invalidate();
         }
         updateDistance();
+    }
+
+    private void setTargetOffsetBottom(int offset,boolean requiresUpdate){
+
     }
 
     private void onSecondaryPointerUp(MotionEvent ev) {

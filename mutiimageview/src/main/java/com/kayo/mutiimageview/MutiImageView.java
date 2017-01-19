@@ -32,6 +32,7 @@ public class MutiImageView extends ImageView {
 
     private PathHelper helper;
     private Paint paint2;
+    private Canvas bgCanvas;//背景样式画布
 
     public MutiImageView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
@@ -49,7 +50,6 @@ public class MutiImageView extends ImageView {
     }
 
     private void init(Context context, AttributeSet attrs) {
-
         TypedArray a = context.obtainStyledAttributes(attrs, com.kayo.mutiimageview.R.styleable.MutiImageView);
         if (null != a) {
             topLeft = (int) a.getDimension(com.kayo.mutiimageview.R.styleable.MutiImageView_top_left, 0);
@@ -63,7 +63,9 @@ public class MutiImageView extends ImageView {
         helper = new PathHelper(this);
         helper.setStyle(style);
         helper.setRound(topLeft,bottomLeft,topRight,bottomRight);
+        bgCanvas = new Canvas();//背景画布
 
+        //用于画 资源图
         paint2 = new Paint();
         paint2.setXfermode(null);
 
@@ -76,9 +78,9 @@ public class MutiImageView extends ImageView {
     @Override
     public void draw(Canvas canvas) {
         Bitmap bitmap = Bitmap.createBitmap(getWidth(), getHeight(), Bitmap.Config.ARGB_8888);
-        Canvas canvas2 = new Canvas(bitmap);
-        super.draw(canvas2);
-        helper.draw(canvas2);
+        bgCanvas.setBitmap(bitmap);
+        super.draw(bgCanvas);
+        helper.draw(bgCanvas);
         canvas.drawBitmap(bitmap, 0, 0, paint2);
         bitmap.recycle();
     }

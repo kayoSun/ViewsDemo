@@ -29,8 +29,8 @@ class PathHelper {
         this.view = view;
         paint = new Paint();
         paint.setColor(Color.WHITE);
-        paint.setAntiAlias(true);
-        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.DST_OUT));//模式 去除多余部分
+        paint.setAntiAlias(true);//抗锯齿
+        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.DST_OUT));//模式 去除多余部分 用于画背景
         path = new Path();
         path.reset();
     }

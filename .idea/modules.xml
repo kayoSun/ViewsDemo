@@ -3,10 +3,12 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/ViewsDemo.iml" filepath="$PROJECT_DIR$/ViewsDemo.iml" />
+      <module fileurl="file://$PROJECT_DIR$/animators_recyclerview/animators_recyclerview.iml" filepath="$PROJECT_DIR$/animators_recyclerview/animators_recyclerview.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/develpeutils/develpeutils.iml" filepath="$PROJECT_DIR$/develpeutils/develpeutils.iml" />
       <module fileurl="file://$PROJECT_DIR$/motionlayout/motionlayout.iml" filepath="$PROJECT_DIR$/motionlayout/motionlayout.iml" />
       <module fileurl="file://$PROJECT_DIR$/mutiimageview/mutiimageview.iml" filepath="$PROJECT_DIR$/mutiimageview/mutiimageview.iml" />
+      <module fileurl="file://$PROJECT_DIR$/mutirecyclerview/mutirecyclerview.iml" filepath="$PROJECT_DIR$/mutirecyclerview/mutirecyclerview.iml" />
     </modules>
   </component>
 </project>
