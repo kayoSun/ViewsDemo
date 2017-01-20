@@ -3,6 +3,7 @@ package com.kayo.animators.animators;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.view.ViewPropertyAnimatorCompat;
 import android.support.v7.widget.RecyclerView;
+import android.view.animation.Interpolator;
 import android.view.animation.OvershootInterpolator;
 
 /**
@@ -16,6 +17,29 @@ public class ShootItemAnimator extends BaseItemAnimator {
 
     private float mTension = 2;
     private int orientation = Orientation.LEFT;
+
+    public ShootItemAnimator(){}
+
+    public ShootItemAnimator(float mTension) {
+        this.mTension = mTension;
+    }
+
+    public ShootItemAnimator(int orientation) {
+        this.orientation = orientation;
+    }
+
+    public ShootItemAnimator(float mTension, int orientation) {
+        this.mTension = mTension;
+        this.orientation = orientation;
+    }
+
+    public void setmTension(float mTension) {
+        this.mTension = mTension;
+    }
+
+    public void setOrientation(int orientation) {
+        this.orientation = orientation;
+    }
 
     @Override
     protected void animateAddImpl(RecyclerView.ViewHolder holder) {
@@ -62,5 +86,10 @@ public class ShootItemAnimator extends BaseItemAnimator {
                 break;
         }
         animate.start();
+    }
+
+    @Override
+    public void setInterpolator(Interpolator mInterpolator) {
+
     }
 }

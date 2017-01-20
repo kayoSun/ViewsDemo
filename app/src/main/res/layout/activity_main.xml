@@ -18,6 +18,27 @@
 
     </com.kayo.motionlayout.MotionLayout>
 
+    <TextView
+        android:id="@+id/add"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="#000"
+        android:onClick="add"
+        android:padding="20dp"
+        android:text="ADD"
+        android:textColor="#fff" />
 
+    <TextView
+        android:id="@+id/del"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:background="#000"
+        android:onClick="del"
+        android:padding="20dp"
+        android:text="DEL"
+        android:textColor="#fff" />
 </RelativeLayout>
 

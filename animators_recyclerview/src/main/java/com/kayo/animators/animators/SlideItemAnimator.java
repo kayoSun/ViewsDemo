@@ -17,6 +17,30 @@ public class SlideItemAnimator extends BaseItemAnimator {
     private int orientation = Orientation.DEFAULT;//滑入方向
     private Interpolator mInterpolator;
 
+    public SlideItemAnimator(){}
+
+    public SlideItemAnimator(int orientation) {
+        this.orientation = orientation;
+    }
+
+    public SlideItemAnimator(Interpolator mInterpolator) {
+        this.mInterpolator = mInterpolator;
+    }
+
+    public SlideItemAnimator(int orientation, Interpolator mInterpolator) {
+        this.orientation = orientation;
+        this.mInterpolator = mInterpolator;
+    }
+
+    public void setOrientation(int orientation) {
+        this.orientation = orientation;
+    }
+
+    @Override
+    public void setInterpolator(Interpolator mInterpolator) {
+        this.mInterpolator = mInterpolator;
+    }
+
     @Override
     protected void animateAddImpl(RecyclerView.ViewHolder holder) {
         ViewPropertyAnimatorCompat animate = ViewCompat.animate(holder.itemView);

@@ -31,6 +31,10 @@ public abstract class MutiAdapter<I extends MutiData> extends RecyclerView.Adapt
 
     @Override
     public MutiHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        MutiHolder mutiHolder = onCreateMutiHolder(inflater, parent, viewType);
+        if (mutiHolder == null){
+            throw  new IllegalArgumentException("请验证  再创建 MutiData 条目数据是否设置条目类型，即调用 setItemType(int itemType) 方法。。。");
+        }
         return onCreateMutiHolder(inflater,parent,viewType);
     }
 
@@ -100,6 +104,22 @@ public abstract class MutiAdapter<I extends MutiData> extends RecyclerView.Adapt
             dataList = new ArrayList<>();
         }
         dataList.addAll(list);
+    }
+
+    public void insertData(I data,int position){
+        if (dataList == null || dataList.size()-1 <position){
+            return;
+        }
+        dataList.add(position,data);
+        notifyItemInserted(position);
+    }
+
+    public void removeData(int position){
+        if (dataList == null || dataList.size()-1<position){
+            return;
+        }
+        dataList.remove(position);
+        notifyItemRemoved(position);
     }
 
 

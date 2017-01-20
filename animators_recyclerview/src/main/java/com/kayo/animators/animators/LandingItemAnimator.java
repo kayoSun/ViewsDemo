@@ -15,6 +15,13 @@ public class LandingItemAnimator extends BaseItemAnimator {
 
     private Interpolator mInterpolator;
 
+    public LandingItemAnimator(){}
+
+    @Override
+    public void setInterpolator(Interpolator mInterpolator) {
+        this.mInterpolator = mInterpolator;
+    }
+
     @Override
     protected void animateAddImpl(RecyclerView.ViewHolder holder) {
         ViewCompat.animate(holder.itemView)

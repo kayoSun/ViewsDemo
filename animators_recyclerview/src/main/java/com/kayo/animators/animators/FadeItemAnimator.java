@@ -17,6 +17,31 @@ public class FadeItemAnimator extends BaseItemAnimator {
     private int orientation = Orientation.DEFAULT;//滑入方向
     private Interpolator mInterpolator;
 
+    public FadeItemAnimator() {
+    }
+
+    public FadeItemAnimator(int orientation) {
+        this.orientation = orientation;
+    }
+
+    public FadeItemAnimator(Interpolator mInterpolator) {
+        this.mInterpolator = mInterpolator;
+    }
+
+    public FadeItemAnimator(int orientation, Interpolator mInterpolator) {
+        this.orientation = orientation;
+        this.mInterpolator = mInterpolator;
+    }
+
+    public void setOrientation(int orientation) {
+        this.orientation = orientation;
+    }
+
+    @Override
+    public void setInterpolator(Interpolator mInterpolator) {
+        this.mInterpolator = mInterpolator;
+    }
+
     @Override
     protected void animateAddImpl(RecyclerView.ViewHolder holder) {
         ViewPropertyAnimatorCompat animate = ViewCompat.animate(holder.itemView);
@@ -25,7 +50,7 @@ public class FadeItemAnimator extends BaseItemAnimator {
                 .setInterpolator(mInterpolator)
                 .setListener(new DefaultAddVpaListener(holder))
                 .setStartDelay(getAddDelay(holder));
-        switch (orientation){
+        switch (orientation) {
             case Orientation.UP:
             case Orientation.DOWN:
                 animate.translationY(0);

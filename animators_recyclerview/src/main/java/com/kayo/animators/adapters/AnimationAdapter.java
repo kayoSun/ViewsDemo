@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 import android.view.animation.Interpolator;
 import android.view.animation.LinearInterpolator;
 
-import com.kayo.animators.ViewHelper;
+import com.kayo.animators.ViewAnimationHelper;
 import com.kayo.animators.interfaces.IAnimateAdapter;
 import com.kayo.animators.interfaces.IAnimeSetting;
 
@@ -28,12 +28,26 @@ public abstract class AnimationAdapter extends RecyclerView.Adapter<RecyclerView
 
     private boolean isFirstOnly = true;
 
+    public AnimationAdapter(){
+        this(null);
+    }
+
     public AnimationAdapter(RecyclerView.Adapter<RecyclerView.ViewHolder> adapter) {
        this(adapter,null);
     }
 
     public AnimationAdapter(RecyclerView.Adapter<RecyclerView.ViewHolder> adapter,IAnimeSetting animeSetting){
+       bindAdapter(adapter);
+       bindAnimeSetting(animeSetting);
+    }
+
+    @Override
+    public void bindAdapter(RecyclerView.Adapter adapter) {
         this.mAdapter = adapter;
+    }
+
+    @Override
+    public void bindAnimeSetting(IAnimeSetting animeSetting) {
         this.animeSetting = animeSetting;
         if (null != animeSetting){
             int duration = animeSetting.getDuration();
@@ -78,7 +92,7 @@ public abstract class AnimationAdapter extends RecyclerView.Adapter<RecyclerView
             }
             mLastPosition = adapterPosition;
         } else {
-            ViewHelper.clearAnimStatus(holder.itemView);
+            ViewAnimationHelper.clearAnimStatus(holder.itemView);
         }
     }
 

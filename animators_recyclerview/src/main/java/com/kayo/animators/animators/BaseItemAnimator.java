@@ -7,8 +7,9 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.*;
 import android.support.v7.widget.SimpleItemAnimator;
 import android.view.View;
+import android.view.animation.Interpolator;
 
-import com.kayo.animators.ViewHelper;
+import com.kayo.animators.ViewAnimationHelper;
 import com.kayo.animators.interfaces.IAnimateHolder;
 
 import java.util.ArrayList;
@@ -47,7 +48,7 @@ public abstract class BaseItemAnimator extends SimpleItemAnimator{
     public boolean animateRemove(RecyclerView.ViewHolder holder) {
         //结束当前所有动画
         endAnimation(holder);
-        ViewHelper.clearAnimStatus(holder.itemView);
+        ViewAnimationHelper.clearAnimStatus(holder.itemView);
         if (holder instanceof IAnimateHolder) {
             ((IAnimateHolder) holder).preAnimateRemoveImpl(holder);
         } else {
@@ -61,7 +62,7 @@ public abstract class BaseItemAnimator extends SimpleItemAnimator{
     @Override
     public boolean animateAdd(RecyclerView.ViewHolder holder) {
         endAnimation(holder);
-        ViewHelper.clearAnimStatus(holder.itemView);
+        ViewAnimationHelper.clearAnimStatus(holder.itemView);
         if (holder instanceof IAnimateHolder) {
             ((IAnimateHolder) holder).preAnimateAddImpl(holder);
         } else {
@@ -141,7 +142,7 @@ public abstract class BaseItemAnimator extends SimpleItemAnimator{
     @Override
     public void endAnimation(RecyclerView.ViewHolder item) {
         View view = item.itemView;
-        ViewHelper.cancelAnim(view);
+        ViewAnimationHelper.cancelAnim(view);
         //处理移除
         endAnimationRemove(item);
         //处理添加
@@ -177,7 +178,7 @@ public abstract class BaseItemAnimator extends SimpleItemAnimator{
         count = addHolders.size();
         for (int i = count - 1; i >= 0; i--) {
             ViewHolder item = addHolders.get(i);
-            ViewHelper.clearAnimStatus(item.itemView);
+            ViewAnimationHelper.clearAnimStatus(item.itemView);
             dispatchAddFinished(item);
             addHolders.remove(i);
         }
@@ -532,7 +533,7 @@ public abstract class BaseItemAnimator extends SimpleItemAnimator{
     //结束删除条目动画
     private void endAnimationRemove(ViewHolder item) {
         if (removeHolders.remove(item)) {
-            ViewHelper.clearAnimStatus(item.itemView);
+            ViewAnimationHelper.clearAnimStatus(item.itemView);
             dispatchRemoveFinished(item);
         }
         //清空移动列表
@@ -557,7 +558,7 @@ public abstract class BaseItemAnimator extends SimpleItemAnimator{
     //结束添加条目动画
     private void endAnimationAdd(ViewHolder item) {
         if (addHolders.remove(item)) {
-            ViewHelper.clearAnimStatus(item.itemView);
+            ViewAnimationHelper.clearAnimStatus(item.itemView);
             dispatchAddFinished(item);
         }
 
@@ -565,7 +566,7 @@ public abstract class BaseItemAnimator extends SimpleItemAnimator{
         for (int i = addListList.size() - 1; i >= 0; i--) {
             ArrayList<ViewHolder> additions = addListList.get(i);
             if (additions.remove(item)) {
-                ViewHelper.clearAnimStatus(item.itemView);
+                ViewAnimationHelper.clearAnimStatus(item.itemView);
                 dispatchAddFinished(item);
                 if (additions.isEmpty()) {
                     addListList.remove(i);
@@ -643,7 +644,7 @@ public abstract class BaseItemAnimator extends SimpleItemAnimator{
             return;
         }
         for (int i = list.size() - 1; i >= 0; i--) {
-            ViewHelper.cancelAnim(list.get(i).itemView);
+            ViewAnimationHelper.cancelAnim(list.get(i).itemView);
         }
     }
 
@@ -654,6 +655,8 @@ public abstract class BaseItemAnimator extends SimpleItemAnimator{
     public long getAddDelay(final RecyclerView.ViewHolder holder) {
         return Math.abs(holder.getAdapterPosition() * getAddDuration() / 4);
     }
+
+    public abstract void setInterpolator(Interpolator mInterpolator);
 
     //================内部类==================
 
@@ -731,12 +734,12 @@ public abstract class BaseItemAnimator extends SimpleItemAnimator{
 
         @Override
         public void onAnimationCancel(View view) {
-            ViewHelper.clearAnimStatus(view);
+            ViewAnimationHelper.clearAnimStatus(view);
         }
 
         @Override
         public void onAnimationEnd(View view) {
-            ViewHelper.clearAnimStatus(view);
+            ViewAnimationHelper.clearAnimStatus(view);
             dispatchAddFinished(mViewHolder);
             addAnimations.remove(mViewHolder);
             if (!isRunning()) {
@@ -759,12 +762,12 @@ public abstract class BaseItemAnimator extends SimpleItemAnimator{
 
         @Override
         public void onAnimationCancel(View view) {
-            ViewHelper.clearAnimStatus(view);
+            ViewAnimationHelper.clearAnimStatus(view);
         }
 
         @Override
         public void onAnimationEnd(View view) {
-            ViewHelper.clearAnimStatus(view);
+            ViewAnimationHelper.clearAnimStatus(view);
             dispatchRemoveFinished(mViewHolder);
             removeAnimations.remove(mViewHolder);
             if (!isRunning()) {

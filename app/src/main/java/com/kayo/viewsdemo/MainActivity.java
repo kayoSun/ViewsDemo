@@ -14,6 +14,8 @@ import android.widget.TextView;
 
 import com.kayo.animators.adapters.SacaleAdapter;
 import com.kayo.animators.adapters.SlideAdapter;
+import com.kayo.animators.animators.Orientation;
+import com.kayo.animators.animators.ScaleItemAnimator;
 import com.kayo.motionlayout.IRefreshListener;
 import com.kayo.motionlayout.MotionLayout;
 import com.kayo.mutiadapter.MutiAdapter;
@@ -33,6 +35,7 @@ public class MainActivity extends AppCompatActivity {
     MotionLayout motion_layout;
     MutiListView listView;
     List<DemoData> dataList = new ArrayList<>();
+    private DemoAdapter demoAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,14 +68,15 @@ public class MainActivity extends AppCompatActivity {
         listView.setColumn(2);
         listView.addColumnRules(new Rule(R.layout.demo_holder_view2,1));
         listView.addColumnRules(new Rule(R.layout.demo_holder_view,2));
-        DemoAdapter demoAdapter = new DemoAdapter(this);
+        demoAdapter = new DemoAdapter(this);
         demoAdapter.setData(dataList);
 
+        listView.setItemAnimator(new ScaleItemAnimator(Orientation.DOWN));
         //启用动画适配器
 
         SlideAdapter slideAdapter = new SlideAdapter(demoAdapter,SlideAdapter.BOTTOM);
 //        SacaleAdapter sacaleAdapter = new SacaleAdapter(demoAdapter);
-        slideAdapter.setDuration(500);
+        slideAdapter.setDuration(2000);
         listView.setAdapter(slideAdapter);
     }
 
@@ -140,6 +144,11 @@ public class MainActivity extends AppCompatActivity {
 
     class DemoData extends MutiData{
         String data;
+        public DemoData(){}
+
+        public DemoData(String data) {
+            this.data = data;
+        }
 
         public String getData() {
             return data;
@@ -156,7 +165,8 @@ public class MainActivity extends AppCompatActivity {
         for (int i = 0; i < count; i++) {
             DemoData demoData = new DemoData();
             demoData.setData("条目数据  " + i);
-            demoData.setItemType(ids[random.nextInt(ids.length)]);
+//            demoData.setItemType(ids[random.nextInt(ids.length)]);
+            demoData.setItemType(R.layout.demo_holder_view2);
             dataList.add(demoData);
         }
     }
@@ -169,6 +179,16 @@ public class MainActivity extends AppCompatActivity {
                 break;
         }
         return super.onTouchEvent(event);
+    }
+
+    public void add(View v){
+        DemoData data = new DemoData("手动插入条目");
+        data.setItemType(R.layout.demo_holder_view2);
+        demoAdapter.insertData(data,1);
+    }
+
+    public void del(View v){
+        demoAdapter.removeData(1);
     }
 
 

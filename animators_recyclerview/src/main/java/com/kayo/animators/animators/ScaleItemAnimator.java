@@ -16,6 +16,30 @@ public class ScaleItemAnimator extends BaseItemAnimator {
     private int orientation = Orientation.DEFAULT;//滑入方向
     private Interpolator mInterpolator;
 
+    public ScaleItemAnimator(){}
+
+    public ScaleItemAnimator(int orientation) {
+        this.orientation = orientation;
+    }
+
+    public ScaleItemAnimator(Interpolator mInterpolator) {
+        this.mInterpolator = mInterpolator;
+    }
+
+    public ScaleItemAnimator(int orientation, Interpolator mInterpolator) {
+        this.orientation = orientation;
+        this.mInterpolator = mInterpolator;
+    }
+
+    public void setOrientation(int orientation) {
+        this.orientation = orientation;
+    }
+
+    @Override
+    public void setInterpolator(Interpolator mInterpolator) {
+        this.mInterpolator = mInterpolator;
+    }
+
     @Override
     public void preAnimateAddImpl(RecyclerView.ViewHolder holder) {
         super.preAnimateAddImpl(holder);
