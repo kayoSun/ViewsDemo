@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Interpolator;
 import android.widget.TextView;
 
 import com.kayo.animators.RecyclerViewHelper;
@@ -18,6 +19,7 @@ import com.kayo.animators.adapters.SlideAdapter;
 import com.kayo.animators.animators.Orientation;
 import com.kayo.animators.animators.ScaleItemAnimator;
 import com.kayo.animators.animators.ShootItemAnimator;
+import com.kayo.animators.interfaces.IAnimeSetting;
 import com.kayo.motionlayout.IRefreshListener;
 import com.kayo.motionlayout.MotionLayout;
 import com.kayo.mutiadapter.MutiAdapter;
@@ -44,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         motion_layout = (MotionLayout) findViewById(R.id.motion_layout);
-        addData(30);
+        addData(6);
         View view = LayoutInflater.from(this).inflate(R.layout.header_view, null);
         motion_layout.setHeaderView(view);
         motion_layout.setHeaderViewHeight(500);
@@ -88,9 +90,34 @@ public class MainActivity extends AppCompatActivity {
 //        helper.bindAnimationAdapter(new SlideAdapter());
 //        helper.setAdapterDuration(500);
 //        helper.showData();
-        RecyclerViewHelper.getHelper().bindRecyclerView(listView).bindDataAdapter(demoAdapter)
-                .bindItemAnimatior(new ShootItemAnimator()).setItemDuration(300)
-                .bindAnimationAdapter(new SacaleAdapter(.2f)).setAdapterDuration(1000)
+        RecyclerViewHelper.getHelper()
+                .bindRecyclerView(listView)
+                .bindDataAdapter(demoAdapter)
+                .bindItemAnimatior(new ShootItemAnimator())
+                .setItemDuration(300)
+                .bindAnimationAdapter(new SacaleAdapter(.2f))
+                .bindAdapterAnimSetting(new IAnimeSetting() {
+                    @Override
+                    public int getDuration() {
+                        return 1000;
+                    }
+
+                    @Override
+                    public Interpolator getInterpolator() {
+                        return null;
+                    }
+
+                    @Override
+                    public int getStartPosition() {
+                        return 0;
+                    }
+
+                    @Override
+                    public boolean showFirstOnly() {
+                        return true;
+                    }
+                })
+//                .setAdapterDuration(1000)
                 .showData();
 
 
@@ -181,8 +208,8 @@ public class MainActivity extends AppCompatActivity {
         for (int i = 0; i < count; i++) {
             DemoData demoData = new DemoData();
             demoData.setData("条目数据  " + i);
-//            demoData.setItemType(ids[random.nextInt(ids.length)]);
-            demoData.setItemType(R.layout.demo_holder_view);
+            demoData.setItemType(ids[random.nextInt(ids.length)]);
+//            demoData.setItemType(R.layout.demo_holder_view);
             dataList.add(demoData);
         }
     }

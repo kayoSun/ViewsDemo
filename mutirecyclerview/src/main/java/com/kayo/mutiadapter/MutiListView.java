@@ -14,22 +14,25 @@ import java.util.List;
 /**
  * Created by shilei on 17/1/11.
  * <pre>
- *
+ *      recyclerview
  * </pre>
  */
 
 public class MutiListView extends RecyclerView {
 
+    private MutiItmHelper mutiItmHelper;
+
     public MutiListView(Context context) {
-        super(context);
+        this(context,null);
     }
 
     public MutiListView(Context context, @Nullable AttributeSet attrs) {
-        super(context, attrs);
+        this(context, attrs,-1);
     }
 
     public MutiListView(Context context, @Nullable AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
+        mutiItmHelper = new MutiItmHelper(this);
     }
 
     @Deprecated
@@ -41,8 +44,6 @@ public class MutiListView extends RecyclerView {
     public void setAdapter(MutiAdapter adapter) {
         super.setAdapter(adapter);
     }
-
-    private MutiItmHelper mutiItmHelper = new MutiItmHelper(this);
 
     public void setColumn(int column) {
         mutiItmHelper.setColumn(column);
@@ -60,6 +61,7 @@ public class MutiListView extends RecyclerView {
         return mutiItmHelper.getColumn();
     }
 
+    //MutiListView 条目 帮助类
     private class MutiItmHelper {
 
         private List<Rule> rules;

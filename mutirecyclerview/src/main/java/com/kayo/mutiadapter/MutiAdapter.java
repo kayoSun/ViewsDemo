@@ -107,7 +107,7 @@ public abstract class MutiAdapter<I extends MutiData> extends RecyclerView.Adapt
     }
 
     public void insertData(I data,int position){
-        if (dataList == null || dataList.size()-1 <position){
+        if (dataList == null || dataList.size() <position){
             return;
         }
         dataList.add(position,data);
