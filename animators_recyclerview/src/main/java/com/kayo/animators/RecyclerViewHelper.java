@@ -6,7 +6,7 @@ import android.view.animation.Interpolator;
 
 import com.kayo.animators.adapters.AnimationAdapter;
 import com.kayo.animators.animators.BaseItemAnimator;
-import com.kayo.animators.interfaces.IAnimeSetting;
+import com.kayo.animators.interfaces.IAnimaSetting;
 
 /**
  * Created by shilei on 17/1/20.
@@ -41,7 +41,7 @@ public class RecyclerViewHelper {
     private int itemDuration = 100;
     private AnimationAdapter animationAdapter;
     private Interpolator adapterInterpolator;
-    private IAnimeSetting animeSetting;
+    private IAnimaSetting animaSetting;
     private int adapterDuration= 100;
 
     /**
@@ -126,8 +126,8 @@ public class RecyclerViewHelper {
      * 绑定列表动画设置类
      * @param animeSetting 列表数据动画设置类
      */
-    public RecyclerViewHelper bindAdapterAnimSetting(IAnimeSetting animeSetting){
-        this.animeSetting = animeSetting;
+    public RecyclerViewHelper bindAdapterAnimSetting(IAnimaSetting animeSetting){
+        this.animaSetting = animeSetting;
         notifyAdapterChanged();
         return this;
     }
@@ -164,17 +164,17 @@ public class RecyclerViewHelper {
             return;
         }
         animationAdapter.bindAdapter(adapter);
-        if (null != animeSetting){
-            int duration = animeSetting.getDuration();
+        if (null != animaSetting){
+            int duration = animaSetting.getDuration();
             if (duration>=0){
                 adapterDuration = duration;
             }
-            Interpolator interpolator = animeSetting.getInterpolator();
+            Interpolator interpolator = animaSetting.getInterpolator();
             if (null != interpolator){
                 adapterInterpolator = interpolator;
             }
-            animationAdapter.showFirstOnly(animeSetting.showFirstOnly());
-            animationAdapter.setStartPosition(animeSetting.getStartPosition());
+            animationAdapter.showFirstOnly(animaSetting.showFirstOnly());
+            animationAdapter.setStartPosition(animaSetting.getStartPosition());
         }
         if (adapterInterpolator != null) {
             animationAdapter.setInterpolator(adapterInterpolator);

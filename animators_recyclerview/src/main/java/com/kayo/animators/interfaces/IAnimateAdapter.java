@@ -14,7 +14,7 @@ import android.view.animation.Interpolator;
 
 public interface IAnimateAdapter {
     void bindAdapter(RecyclerView.Adapter adapter);
-    void bindAnimeSetting(IAnimeSetting animeSetting);
+    void bindAnimeSetting(IAnimaSetting animeSetting);
     void setDuration(int duration);
     void setInterpolator(Interpolator interpolator);
     void setStartPosition(int start);

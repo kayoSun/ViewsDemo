@@ -10,7 +10,7 @@ import android.view.animation.Interpolator;
  * </pre>
  */
 
-public interface IAnimeSetting {
+public interface IAnimaSetting {
     /**
      * 设置动画执行时间
      */
