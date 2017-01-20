@@ -72,7 +72,6 @@ public class MainActivity extends AppCompatActivity {
         mutiListView.addColumnRule(new Rule(R.layout.demo_holder_view,2));
         demoAdapter = new DemoAdapter(this);
         demoAdapter.setData(dataList);
-
 //        mutiListView.setItemAnimator(new ScaleItemAnimator(Orientation.DOWN));
         //启用动画适配器
 

@@ -70,7 +70,7 @@ public class MutiListView extends RecyclerView {
     }
 
     //MutiListView 条目 帮助类
-    private class MutiItmHelper {
+    public static class MutiItmHelper {
 
         private List<Rule> rules;
         private SparseIntArray rulesInt;
