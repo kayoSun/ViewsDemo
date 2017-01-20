@@ -37,47 +37,55 @@ public class RecyclerViewHelper {
     private RecyclerView.Adapter adapter;
     private BaseItemAnimator itemAnimator;
     private Interpolator itemInterpolator;
-    private int itemDuration;
+    private int itemDuration = 100;
     private AnimationAdapter animationAdapter;
     private Interpolator adapterInterpolator;
     private int adapterDuration;
 
-    public void bindRecyclerView(RecyclerView recyclerView) {
+    public RecyclerViewHelper bindRecyclerView(RecyclerView recyclerView) {
         this.recyclerView = recyclerView;
+        return this;
     }
 
-    public void bindDataAdapter(RecyclerView.Adapter adapter) {
+    public RecyclerViewHelper bindDataAdapter(RecyclerView.Adapter adapter) {
         this.adapter = adapter;
+        return this;
     }
 
-    public void bindItemAnimatior(BaseItemAnimator itemAnimator) {
+    public RecyclerViewHelper bindItemAnimatior(BaseItemAnimator itemAnimator) {
         this.itemAnimator = itemAnimator;
         notifyItemChanged();
+        return this;
     }
 
-    public void bindItemInterpolator(Interpolator itemInterpolator) {
+    public RecyclerViewHelper bindItemInterpolator(Interpolator itemInterpolator) {
         this.itemInterpolator = itemInterpolator;
         notifyItemChanged();
+        return this;
     }
 
-    public void setItemDuration(int itemDuration) {
+    public RecyclerViewHelper setItemDuration(int itemDuration) {
         this.itemDuration = itemDuration;
         notifyItemChanged();
+        return this;
     }
 
-    public void bindAnimationAdapter(AnimationAdapter adapter) {
+    public RecyclerViewHelper bindAnimationAdapter(AnimationAdapter adapter) {
         this.animationAdapter = adapter;
         notifyAdapterChanged();
+        return this;
     }
 
-    public void bindAdapterInterpolator(Interpolator adapterInterpolator) {
+    public RecyclerViewHelper bindAdapterInterpolator(Interpolator adapterInterpolator) {
         this.adapterInterpolator = adapterInterpolator;
         notifyAdapterChanged();
+        return this;
     }
 
-    public void setAdapterDuration(int adapterDuration) {
+    public RecyclerViewHelper setAdapterDuration(int adapterDuration) {
         this.adapterDuration = adapterDuration;
         notifyAdapterChanged();
+        return this;
     }
 
     private void notifyItemChanged() {

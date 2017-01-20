@@ -12,10 +12,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.kayo.animators.RecyclerViewHelper;
 import com.kayo.animators.adapters.SacaleAdapter;
 import com.kayo.animators.adapters.SlideAdapter;
 import com.kayo.animators.animators.Orientation;
 import com.kayo.animators.animators.ScaleItemAnimator;
+import com.kayo.animators.animators.ShootItemAnimator;
 import com.kayo.motionlayout.IRefreshListener;
 import com.kayo.motionlayout.MotionLayout;
 import com.kayo.mutiadapter.MutiAdapter;
@@ -71,13 +73,27 @@ public class MainActivity extends AppCompatActivity {
         demoAdapter = new DemoAdapter(this);
         demoAdapter.setData(dataList);
 
-        listView.setItemAnimator(new ScaleItemAnimator(Orientation.DOWN));
+//        listView.setItemAnimator(new ScaleItemAnimator(Orientation.DOWN));
         //启用动画适配器
 
-        SlideAdapter slideAdapter = new SlideAdapter(demoAdapter,SlideAdapter.BOTTOM);
+//        SlideAdapter slideAdapter = new SlideAdapter(demoAdapter,SlideAdapter.BOTTOM);
 //        SacaleAdapter sacaleAdapter = new SacaleAdapter(demoAdapter);
-        slideAdapter.setDuration(2000);
-        listView.setAdapter(slideAdapter);
+//        slideAdapter.setDuration(2000);
+//        listView.setAdapter(slideAdapter);
+//        RecyclerViewHelper helper = RecyclerViewHelper.getHelper();
+//        helper.bindRecyclerView(listView);
+//        helper.bindDataAdapter(demoAdapter);
+//        helper.bindItemAnimatior(new ScaleItemAnimator(Orientation.DOWN));
+//        helper.setItemDuration(500);
+//        helper.bindAnimationAdapter(new SlideAdapter());
+//        helper.setAdapterDuration(500);
+//        helper.showData();
+        RecyclerViewHelper.getHelper().bindRecyclerView(listView).bindDataAdapter(demoAdapter)
+                .bindItemAnimatior(new ShootItemAnimator()).setItemDuration(300)
+                .bindAnimationAdapter(new SacaleAdapter(.2f)).setAdapterDuration(1000)
+                .showData();
+
+
     }
 
 
@@ -166,7 +182,7 @@ public class MainActivity extends AppCompatActivity {
             DemoData demoData = new DemoData();
             demoData.setData("条目数据  " + i);
 //            demoData.setItemType(ids[random.nextInt(ids.length)]);
-            demoData.setItemType(R.layout.demo_holder_view2);
+            demoData.setItemType(R.layout.demo_holder_view);
             dataList.add(demoData);
         }
     }
@@ -183,7 +199,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void add(View v){
         DemoData data = new DemoData("手动插入条目");
-        data.setItemType(R.layout.demo_holder_view2);
+        data.setItemType(R.layout.demo_holder_view);
         demoAdapter.insertData(data,1);
     }
 

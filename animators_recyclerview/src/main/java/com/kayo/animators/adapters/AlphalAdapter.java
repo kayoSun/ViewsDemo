@@ -18,6 +18,10 @@ public class AlphalAdapter extends AnimationAdapter {
     private final float mFrom;
     private String action = "alpha";
 
+    public AlphalAdapter(float mFrom) {
+        this.mFrom = mFrom;
+    }
+
     public AlphalAdapter(RecyclerView.Adapter adapter) {
         this(adapter, DEFAULT_ALPHA_FROM);
     }

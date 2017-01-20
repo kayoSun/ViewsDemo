@@ -8,8 +8,11 @@ import android.view.animation.Interpolator;
 import android.view.animation.LinearInterpolator;
 
 import com.kayo.animators.ViewAnimationHelper;
+import com.kayo.animators.animators.Orientation;
 import com.kayo.animators.interfaces.IAnimateAdapter;
 import com.kayo.animators.interfaces.IAnimeSetting;
+
+import static com.kayo.animators.adapters.SlideAdapter.LEFT;
 
 /**
  * Created by shilei on 17/1/19.

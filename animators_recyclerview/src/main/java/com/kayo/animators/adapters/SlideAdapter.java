@@ -21,6 +21,17 @@ public class SlideAdapter extends AnimationAdapter {
     private String action = "translationX";
     private int orientation = LEFT;//滑入方向
 
+    public SlideAdapter() {
+    }
+
+    public SlideAdapter(int orientation) {
+        this.orientation = orientation;
+    }
+
+    public SlideAdapter(RecyclerView.Adapter<RecyclerView.ViewHolder> adapter) {
+        super(adapter);
+    }
+
     /**
      * @param adapter     数据适配器
      * @param orientation <ul>
@@ -52,5 +63,9 @@ public class SlideAdapter extends AnimationAdapter {
                 break;
         }
         return animators;
+    }
+
+    public void setOrientation(int orientation) {
+        this.orientation = orientation;
     }
 }
