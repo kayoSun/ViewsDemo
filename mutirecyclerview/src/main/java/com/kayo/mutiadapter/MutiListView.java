@@ -45,12 +45,20 @@ public class MutiListView extends RecyclerView {
         super.setAdapter(adapter);
     }
 
+    /**
+     * 设置条目的最大展示 列数或行数
+     * @param column 列数或行数
+     */
     public void setColumn(int column) {
         mutiItmHelper.setColumn(column);
     }
 
-    public void addColumnRules(Rule rule) {
-        mutiItmHelper.addColumnRules(rule);
+    /**
+     * 条件调试展示规则
+     * @param rule  规则
+     */
+    public void addColumnRule(Rule rule) {
+        mutiItmHelper.addColumnRule(rule);
     }
 
     public MutiItmHelper getMutiItmHelper() {
@@ -74,12 +82,19 @@ public class MutiListView extends RecyclerView {
             this.parent = parent;
         }
 
-        public void setParent(MutiListView parent) {
+        public void bindParent(MutiListView parent) {
             this.parent = parent;
             setColumn(column);
         }
 
-        private void addColumnRules(Rule rule) {
+        private void addColumnRule(Rule rule) {
+            if (null == rule){
+                return;
+            }
+            if (column < rule.getRule()){
+                column = rule.getRule();
+                setColumn(column);
+            }
             if (null == rules) {
                 rules = new ArrayList<>();
             }

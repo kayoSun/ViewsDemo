@@ -31,9 +31,7 @@ public class EndTextView extends TextView {
         int width = getWidth();
         width -= getPaddingLeft();
         width -= getPaddingRight();
-        System.out.println("EndTextView --> " + "width = "+width);
         float v = getPaint().measureText(getText().toString());
-        System.out.println("EndTextView --> " + "textWidth = "+v);
         if (width<v){
             setText("");
         }

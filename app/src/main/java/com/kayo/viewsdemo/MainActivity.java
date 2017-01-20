@@ -3,23 +3,15 @@ package com.kayo.viewsdemo;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Interpolator;
 import android.widget.TextView;
 
 import com.kayo.animators.RecyclerViewHelper;
 import com.kayo.animators.adapters.SacaleAdapter;
-import com.kayo.animators.adapters.SlideAdapter;
-import com.kayo.animators.animators.Orientation;
-import com.kayo.animators.animators.ScaleItemAnimator;
 import com.kayo.animators.animators.ShootItemAnimator;
-import com.kayo.animators.interfaces.IAnimeSetting;
 import com.kayo.motionlayout.IRefreshListener;
 import com.kayo.motionlayout.MotionLayout;
 import com.kayo.mutiadapter.MutiAdapter;
@@ -33,11 +25,17 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+/**
+ * Created by shilei on 17/1/19.
+ * <pre>
+ *     库测试类
+ * </pre>
+ */
 
 public class MainActivity extends AppCompatActivity {
 
-    MotionLayout motion_layout;
-    MutiListView listView;
+    MotionLayout motionLayout;
+    MutiListView mutiListView;
     List<DemoData> dataList = new ArrayList<>();
     private DemoAdapter demoAdapter;
 
@@ -45,13 +43,13 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        motion_layout = (MotionLayout) findViewById(R.id.motion_layout);
+        motionLayout = (MotionLayout) findViewById(R.id.motion_layout);
         addData(6);
         View view = LayoutInflater.from(this).inflate(R.layout.header_view, null);
-        motion_layout.setHeaderView(view);
-        motion_layout.setHeaderViewHeight(500);
-        motion_layout.setAutoCheck(true);
-        motion_layout.addRefreshListener(new IRefreshListener() {
+        motionLayout.setHeaderView(view);
+        motionLayout.setHeaderViewHeight(500);
+        motionLayout.setAutoCheck(true);
+        motionLayout.addRefreshListener(new IRefreshListener() {
 
             @Override
             public void onRefresh() {
@@ -68,22 +66,22 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        listView = (MutiListView) findViewById(R.id.list_view);
-        listView.setColumn(2);
-        listView.addColumnRules(new Rule(R.layout.demo_holder_view2,1));
-        listView.addColumnRules(new Rule(R.layout.demo_holder_view,2));
+        mutiListView = (MutiListView) findViewById(R.id.muti_list_view);
+//        mutiListView.setColumn(2);
+        mutiListView.addColumnRule(new Rule(R.layout.demo_holder_view2,1));
+        mutiListView.addColumnRule(new Rule(R.layout.demo_holder_view,2));
         demoAdapter = new DemoAdapter(this);
         demoAdapter.setData(dataList);
 
-//        listView.setItemAnimator(new ScaleItemAnimator(Orientation.DOWN));
+//        mutiListView.setItemAnimator(new ScaleItemAnimator(Orientation.DOWN));
         //启用动画适配器
 
 //        SlideAdapter slideAdapter = new SlideAdapter(demoAdapter,SlideAdapter.BOTTOM);
 //        SacaleAdapter sacaleAdapter = new SacaleAdapter(demoAdapter);
 //        slideAdapter.setDuration(2000);
-//        listView.setAdapter(slideAdapter);
+//        mutiListView.setAdapter(slideAdapter);
 //        RecyclerViewHelper helper = RecyclerViewHelper.getHelper();
-//        helper.bindRecyclerView(listView);
+//        helper.bindRecyclerView(mutiListView);
 //        helper.bindDataAdapter(demoAdapter);
 //        helper.bindItemAnimatior(new ScaleItemAnimator(Orientation.DOWN));
 //        helper.setItemDuration(500);
@@ -91,12 +89,12 @@ public class MainActivity extends AppCompatActivity {
 //        helper.setAdapterDuration(500);
 //        helper.showData();
         RecyclerViewHelper.getHelper()
-                .bindRecyclerView(listView)
+                .bindRecyclerView(mutiListView)
                 .bindDataAdapter(demoAdapter)
                 .bindItemAnimatior(new ShootItemAnimator())
                 .setItemDuration(300)
                 .bindAnimationAdapter(new SacaleAdapter(.2f))
-                .setAdapterDuration(1000)
+                .setAdapterDuration(500)
                 .showData();
 
     }
@@ -208,7 +206,7 @@ public class MainActivity extends AppCompatActivity {
     public boolean onTouchEvent(MotionEvent event) {
         switch (event.getAction()) {
             case MotionEvent.ACTION_UP:
-                motion_layout.setRefreshing(false);
+                motionLayout.setRefreshing(false);
                 break;
         }
         return super.onTouchEvent(event);
