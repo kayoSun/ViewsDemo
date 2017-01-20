@@ -96,34 +96,35 @@ public class MainActivity extends AppCompatActivity {
                 .bindItemAnimatior(new ShootItemAnimator())
                 .setItemDuration(300)
                 .bindAnimationAdapter(new SacaleAdapter(.2f))
-                .bindAdapterAnimSetting(new IAnimeSetting() {
-                    @Override
-                    public int getDuration() {
-                        return 1000;
-                    }
-
-                    @Override
-                    public Interpolator getInterpolator() {
-                        return null;
-                    }
-
-                    @Override
-                    public int getStartPosition() {
-                        return 0;
-                    }
-
-                    @Override
-                    public boolean showFirstOnly() {
-                        return true;
-                    }
-                })
-//                .setAdapterDuration(1000)
+                .setAdapterDuration(1000)
                 .showData();
-
 
     }
 
 
+    public void add(View v){
+        DemoData data = new DemoData("手动插入条目");
+        data.setItemType(R.layout.demo_holder_view);
+        demoAdapter.insertData(data,1);
+    }
+
+    public void del(View v){
+        demoAdapter.removeData(1);
+    }
+
+    Random  random = new Random();
+    int[] ids =  new int[]{R.layout.demo_holder_view,R.layout.demo_holder_view2};
+    private void addData(int count) {
+        for (int i = 0; i < count; i++) {
+            DemoData demoData = new DemoData();
+            demoData.setData("条目数据  " + i);
+            demoData.setItemType(ids[random.nextInt(ids.length)]);
+//            demoData.setItemType(R.layout.demo_holder_view);
+            dataList.add(demoData);
+        }
+    }
+
+//=============================================================
     class DemoAdapter extends MutiAdapter<DemoData>{
 
         private int layout_id = R.layout.demo_holder_view;
@@ -202,17 +203,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    Random  random = new Random();
-    int[] ids =  new int[]{R.layout.demo_holder_view,R.layout.demo_holder_view2};
-    private void addData(int count) {
-        for (int i = 0; i < count; i++) {
-            DemoData demoData = new DemoData();
-            demoData.setData("条目数据  " + i);
-            demoData.setItemType(ids[random.nextInt(ids.length)]);
-//            demoData.setItemType(R.layout.demo_holder_view);
-            dataList.add(demoData);
-        }
-    }
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
@@ -223,16 +213,4 @@ public class MainActivity extends AppCompatActivity {
         }
         return super.onTouchEvent(event);
     }
-
-    public void add(View v){
-        DemoData data = new DemoData("手动插入条目");
-        data.setItemType(R.layout.demo_holder_view);
-        demoAdapter.insertData(data,1);
-    }
-
-    public void del(View v){
-        demoAdapter.removeData(1);
-    }
-
-
 }

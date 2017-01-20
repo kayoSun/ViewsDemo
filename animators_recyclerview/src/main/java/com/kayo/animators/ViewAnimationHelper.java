@@ -11,6 +11,7 @@ import android.view.View;
  */
 
 public class ViewAnimationHelper {
+
     /**
      * 重置View的所有动画状态
      * @param view 被操作view

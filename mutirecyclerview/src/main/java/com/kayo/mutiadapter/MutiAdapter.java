@@ -121,7 +121,4 @@ public abstract class MutiAdapter<I extends MutiData> extends RecyclerView.Adapt
         dataList.remove(position);
         notifyItemRemoved(position);
     }
-
-
-
 }
