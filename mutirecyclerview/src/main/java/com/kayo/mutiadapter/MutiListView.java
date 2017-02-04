@@ -55,10 +55,10 @@ public class MutiListView extends RecyclerView {
 
     /**
      * 条件调试展示规则
-     * @param rule  规则
+     * @param columnRule  规则
      */
-    public void addColumnRule(Rule rule) {
-        mutiItmHelper.addColumnRule(rule);
+    public void addColumnRule(ColumnRule columnRule) {
+        mutiItmHelper.addColumnRule(columnRule);
     }
 
     public MutiItmHelper getMutiItmHelper() {
@@ -72,7 +72,7 @@ public class MutiListView extends RecyclerView {
     //MutiListView 条目 帮助类
     public static class MutiItmHelper {
 
-        private List<Rule> rules;
+        private List<ColumnRule> columnRules;
         private SparseIntArray rulesInt;
         private MutiListView parent;
         private RecyclerView.LayoutManager layoutManager;
@@ -87,22 +87,22 @@ public class MutiListView extends RecyclerView {
             setColumn(column);
         }
 
-        private void addColumnRule(Rule rule) {
-            if (null == rule){
+        private void addColumnRule(ColumnRule columnRule) {
+            if (null == columnRule){
                 return;
             }
-            if (column < rule.getRule()){
-                column = rule.getRule();
+            if (column < columnRule.getRule()){
+                column = columnRule.getRule();
                 setColumn(column);
             }
-            if (null == rules) {
-                rules = new ArrayList<>();
+            if (null == columnRules) {
+                columnRules = new ArrayList<>();
             }
-            rules.add(rule);
+            columnRules.add(columnRule);
             if (null == rulesInt) {
                 rulesInt = new SparseIntArray();
             }
-            rulesInt.put(rule.getType(), rule.getRule());
+            rulesInt.put(columnRule.getType(), columnRule.getRule());
         }
 
         private void setColumn(int column) {

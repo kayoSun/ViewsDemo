@@ -5,18 +5,11 @@
     android:layout_height="match_parent"
     tools:context="com.kayo.viewsdemo.MainActivity">
 
-    <com.kayo.motionlayout.MotionLayout
-        android:id="@+id/motion_layout"
+    <com.kayo.mutiadapter.MutiListView
+        android:id="@+id/muti_list_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <com.kayo.mutiadapter.MutiListView
-            android:id="@+id/muti_list_view"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="#00f" />
-
-    </com.kayo.motionlayout.MotionLayout>
+        android:layout_height="match_parent"
+        android:background="#00f" />
 
     <TextView
         android:id="@+id/add"

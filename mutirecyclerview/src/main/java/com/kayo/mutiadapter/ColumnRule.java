@@ -7,12 +7,12 @@ package com.kayo.mutiadapter;
  * </pre>
  */
 
-public class Rule {
+public class ColumnRule {
     int type;//表示type，条目类型的位置ID 可用布局文件ID作为此值
     int rule;//表示占行数 或者 列数
 
-    public Rule(){}
-    public Rule(int type, int rule) {
+    public ColumnRule(){}
+    public ColumnRule(int type, int rule) {
         this.type = type;
         this.rule = rule;
     }

@@ -15,18 +15,18 @@ import com.kayo.animators.interfaces.IAnimaSetting;
  * </pre>
  */
 
-public class RecyclerViewHelper {
+public class ItemAnimHelper {
 
     @SuppressLint("StaticFieldLeak")
-    private static RecyclerViewHelper instance;
-    private RecyclerViewHelper() {
+    private static ItemAnimHelper instance;
+    private ItemAnimHelper() {
     }
 
-    public static RecyclerViewHelper getHelper() {
+    public static ItemAnimHelper getHelper() {
         if (instance == null) {
-            synchronized (RecyclerViewHelper.class) {
+            synchronized (ItemAnimHelper.class) {
                 if (instance == null) {
-                    instance = new RecyclerViewHelper();
+                    instance = new ItemAnimHelper();
                 }
             }
         }
@@ -48,7 +48,7 @@ public class RecyclerViewHelper {
      * 绑定RecyclerView
      * @param recyclerView 备操作的recyclerview
      */
-    public RecyclerViewHelper bindRecyclerView(RecyclerView recyclerView) {
+    public ItemAnimHelper bindRecyclerView(RecyclerView recyclerView) {
         this.recyclerView = recyclerView;
         return this;
     }
@@ -57,7 +57,7 @@ public class RecyclerViewHelper {
      * 绑定原生数据适配器
      * @param adapter 数据适配器
      */
-    public RecyclerViewHelper bindDataAdapter(RecyclerView.Adapter adapter) {
+    public ItemAnimHelper bindDataAdapter(RecyclerView.Adapter adapter) {
         this.adapter = adapter;
         return this;
     }
@@ -66,7 +66,7 @@ public class RecyclerViewHelper {
      * 绑定条目动画
      * @param itemAnimator 条目动画
      */
-    public RecyclerViewHelper bindItemAnimatior(BaseItemAnimator itemAnimator) {
+    public ItemAnimHelper bindItemAnimatior(BaseItemAnimator itemAnimator) {
         this.itemAnimator = itemAnimator;
         notifyItemChanged();
         return this;
@@ -76,7 +76,7 @@ public class RecyclerViewHelper {
      * 绑定条目动画 差值器
      * @param itemInterpolator 差值器
      */
-    public RecyclerViewHelper bindItemInterpolator(Interpolator itemInterpolator) {
+    public ItemAnimHelper bindItemInterpolator(Interpolator itemInterpolator) {
         this.itemInterpolator = itemInterpolator;
         notifyItemChanged();
         return this;
@@ -86,7 +86,7 @@ public class RecyclerViewHelper {
      * 设置条目动画执行时间
      * @param itemDuration 动画时间
      */
-    public RecyclerViewHelper setItemDuration(int itemDuration) {
+    public ItemAnimHelper setItemDuration(int itemDuration) {
         this.itemDuration = itemDuration;
         notifyItemChanged();
         return this;
@@ -96,7 +96,7 @@ public class RecyclerViewHelper {
      * 绑定列表动画数据适配器
      * @param adapter  动画适配器
      */
-    public RecyclerViewHelper bindAnimationAdapter(AnimationAdapter adapter) {
+    public ItemAnimHelper bindAnimationAdapter(AnimationAdapter adapter) {
         this.animationAdapter = adapter;
         notifyAdapterChanged();
         return this;
@@ -106,7 +106,7 @@ public class RecyclerViewHelper {
      * 绑定列表动画差值器
      * @param adapterInterpolator 动画差值器
      */
-    public RecyclerViewHelper bindAdapterInterpolator(Interpolator adapterInterpolator) {
+    public ItemAnimHelper bindAdapterInterpolator(Interpolator adapterInterpolator) {
         this.adapterInterpolator = adapterInterpolator;
         notifyAdapterChanged();
         return this;
@@ -116,7 +116,7 @@ public class RecyclerViewHelper {
      * 设置列表动画执行时间
      * @param adapterDuration 动画执行时间
      */
-    public RecyclerViewHelper setAdapterDuration(int adapterDuration) {
+    public ItemAnimHelper setAdapterDuration(int adapterDuration) {
         this.adapterDuration = adapterDuration;
         notifyAdapterChanged();
         return this;
@@ -126,7 +126,7 @@ public class RecyclerViewHelper {
      * 绑定列表动画设置类
      * @param animeSetting 列表数据动画设置类
      */
-    public RecyclerViewHelper bindAdapterAnimSetting(IAnimaSetting animeSetting){
+    public ItemAnimHelper bindAdapterAnimSetting(IAnimaSetting animeSetting){
         this.animaSetting = animeSetting;
         notifyAdapterChanged();
         return this;

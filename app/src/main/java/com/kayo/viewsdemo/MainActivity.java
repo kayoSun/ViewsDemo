@@ -1,24 +1,31 @@
 package com.kayo.viewsdemo;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.SystemClock;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.kayo.animators.RecyclerViewHelper;
+import com.kayo.animators.ItemAnimHelper;
 import com.kayo.animators.adapters.SacaleAdapter;
 import com.kayo.animators.animators.ShootItemAnimator;
-import com.kayo.motionlayout.IRefreshListener;
-import com.kayo.motionlayout.MotionLayout;
+import com.kayo.mutiadapter.ColumnRule;
+import com.kayo.mutiadapter.IMutiData;
 import com.kayo.mutiadapter.MutiAdapter;
 import com.kayo.mutiadapter.MutiData;
 import com.kayo.mutiadapter.MutiHolder;
 import com.kayo.mutiadapter.MutiListView;
-import com.kayo.mutiadapter.Rule;
+import com.kayo.mutiadapter.rules.AbsRule;
+import com.kayo.mutiadapter.rules.Adapter;
+import com.kayo.mutiadapter.rules.AdapterRulesManager;
+import com.kayo.mutiadapter.rules.LoadMoreRule;
+import com.kayo.mutiadapter.rules.SimpleLoadMoreRule;
+import com.kayo.mutiadapter.rules.SimpleRule;
 import com.kayo.mutiimageview.MutiImageView;
 
 import java.util.ArrayList;
@@ -34,7 +41,6 @@ import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
 
-    MotionLayout motionLayout;
     MutiListView mutiListView;
     List<DemoData> dataList = new ArrayList<>();
     private DemoAdapter demoAdapter;
@@ -42,36 +48,63 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        motionLayout = (MotionLayout) findViewById(R.id.motion_layout);
-        addData(6);
-        View view = LayoutInflater.from(this).inflate(R.layout.header_view, null);
-        motionLayout.setHeaderView(view);
-        motionLayout.setHeaderViewHeight(500);
-        motionLayout.setAutoCheck(true);
-        motionLayout.addRefreshListener(new IRefreshListener() {
-
-            @Override
-            public void onRefresh() {
-                System.out.println("MainActivity --> " + "onRefresh");
-            }
-
-            @Override
-            public void onPullDistance(int distance) {
-
-            }
-
-            @Override
-            public void onPullEnable(boolean enable) {
-            }
-        });
+        setContentView(R.layout.layout_main);
+        addData(20);
 
         mutiListView = (MutiListView) findViewById(R.id.muti_list_view);
 //        mutiListView.setColumn(2);
-        mutiListView.addColumnRule(new Rule(R.layout.demo_holder_view2,1));
-        mutiListView.addColumnRule(new Rule(R.layout.demo_holder_view,2));
-        demoAdapter = new DemoAdapter(this);
-        demoAdapter.setData(dataList);
+        mutiListView.addColumnRule(new ColumnRule(R.layout.demo_holder_view2,1));
+        mutiListView.addColumnRule(new ColumnRule(R.layout.demo_holder_view,2));
+        final AdapterRulesManager manager = new AdapterRulesManager();
+        manager.bindRecyclerView(mutiListView);
+        manager.setDatas(dataList);
+        manager.addRule(new com.kayo.mutiadapter.rules.Rule<DemoData,DemoHolder>(){
+            @Override
+            public int layoutId() {
+                return R.layout.demo_holder_view;
+            }
+
+            @Override
+            public DemoHolder holder(ViewGroup parent,int layoutId) {
+                Context context = parent.getContext();
+                return new DemoHolder(LayoutInflater.from(context).inflate(layoutId,parent,false));
+            }
+
+            @Override
+            public void convert(DemoHolder holder, DemoData data) {
+                holder.bindData(data);
+            }
+        });
+        manager.addRule(new AbsRule<DemoData, DemoHolder2>(R.layout.demo_holder_view2) {
+            @Override
+            public DemoHolder2 holder(ViewGroup parent, int layoutId) {
+                Context context = parent.getContext();
+                return new DemoHolder2(LayoutInflater.from(context).inflate(layoutId,parent,false));
+            }
+
+            @Override
+            public void convert(DemoHolder2 holder, DemoData data) {
+                holder.bindData(data);
+            }
+        });
+        manager.addFooter(new SimpleLoadMoreRule(){
+            @Override
+            public void loadMore() {
+                System.out.println("MainActivity --> " + "loadmore....");
+                final List<DemoData> datas = addDatas(10);
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        manager.addDatas(datas);
+                    }
+                },1000);
+            }
+        });
+//        manager.show();
+
+
+//        demoAdapter = new DemoAdapter(this);
+//        demoAdapter.setData(dataList);
 //        mutiListView.setItemAnimator(new ScaleItemAnimator(Orientation.DOWN));
         //启用动画适配器
 
@@ -79,7 +112,7 @@ public class MainActivity extends AppCompatActivity {
 //        SacaleAdapter sacaleAdapter = new SacaleAdapter(demoAdapter);
 //        slideAdapter.setDuration(2000);
 //        mutiListView.setAdapter(slideAdapter);
-//        RecyclerViewHelper helper = RecyclerViewHelper.getHelper();
+//        ItemAnimHelper helper = ItemAnimHelper.getHelper();
 //        helper.bindRecyclerView(mutiListView);
 //        helper.bindDataAdapter(demoAdapter);
 //        helper.bindItemAnimatior(new ScaleItemAnimator(Orientation.DOWN));
@@ -87,9 +120,9 @@ public class MainActivity extends AppCompatActivity {
 //        helper.bindAnimationAdapter(new SlideAdapter());
 //        helper.setAdapterDuration(500);
 //        helper.showData();
-        RecyclerViewHelper.getHelper()
+        ItemAnimHelper.getHelper()
                 .bindRecyclerView(mutiListView)
-                .bindDataAdapter(demoAdapter)
+                .bindDataAdapter(manager.getAdapter())
                 .bindItemAnimatior(new ShootItemAnimator())
                 .setItemDuration(300)
                 .bindAnimationAdapter(new SacaleAdapter(.2f))
@@ -116,9 +149,19 @@ public class MainActivity extends AppCompatActivity {
             DemoData demoData = new DemoData();
             demoData.setData("条目数据  " + i);
             demoData.setItemType(ids[random.nextInt(ids.length)]);
-//            demoData.setItemType(R.layout.demo_holder_view);
             dataList.add(demoData);
         }
+    }
+
+    private List<DemoData> addDatas(int count){
+        List<DemoData> datas = new ArrayList<>();
+        for (int i = 0; i < count; i++) {
+            DemoData demoData = new DemoData();
+            demoData.setData("条目数据  " + i);
+            demoData.setItemType(ids[random.nextInt(ids.length)]);
+            datas.add(demoData);
+        }
+        return datas;
     }
 
 //=============================================================
@@ -161,7 +204,8 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void bindData(DemoData data) {
             title.setText(data.getData());
-            image.setBackgroundDrawable(getResources().getDrawable(R.drawable.abc));
+            Drawable drawable = getResources().getDrawable(R.drawable.abc);
+            image.setBackgroundDrawable(drawable);
         }
     }
 
@@ -198,16 +242,5 @@ public class MainActivity extends AppCompatActivity {
         public void setData(String data) {
             this.data = data;
         }
-    }
-
-
-    @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        switch (event.getAction()) {
-            case MotionEvent.ACTION_UP:
-                motionLayout.setRefreshing(false);
-                break;
-        }
-        return super.onTouchEvent(event);
     }
 }
