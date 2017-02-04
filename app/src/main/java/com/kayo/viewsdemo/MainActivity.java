@@ -1,10 +1,12 @@
 package com.kayo.viewsdemo;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
+import android.text.SpannableStringBuilder;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +15,7 @@ import android.widget.TextView;
 import com.kayo.animators.ItemAnimHelper;
 import com.kayo.animators.adapters.SacaleAdapter;
 import com.kayo.animators.animators.ShootItemAnimator;
+import com.kayo.develpeutils.TextSpanUtils;
 import com.kayo.mutiadapter.ColumnRule;
 import com.kayo.mutiadapter.MutiAdapter;
 import com.kayo.mutiadapter.MutiData;
@@ -143,7 +146,8 @@ public class MainActivity extends AppCompatActivity {
         for (int i = 0; i < count; i++) {
             DemoData demoData = new DemoData();
             demoData.setData("条目数据  " + i);
-            demoData.setItemType(ids[random.nextInt(ids.length)]);
+//            demoData.setItemType(ids[random.nextInt(ids.length)]);
+            demoData.setItemType(R.layout.demo_holder_view);
             dataList.add(demoData);
         }
     }
@@ -153,7 +157,8 @@ public class MainActivity extends AppCompatActivity {
         for (int i = 0; i < count; i++) {
             DemoData demoData = new DemoData();
             demoData.setData("条目数据  " + i);
-            demoData.setItemType(ids[random.nextInt(ids.length)]);
+//            demoData.setItemType(ids[random.nextInt(ids.length)]);
+            demoData.setItemType(R.layout.demo_holder_view);
             datas.add(demoData);
         }
         return datas;
@@ -198,7 +203,10 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public void bindData(DemoData data) {
-            title.setText(data.getData());
+            SpannableStringBuilder spannableStringBuilder = TextSpanUtils.getBuilder(itemView.getContext()," ")
+                    .append(data.getData())
+                    .setRundBackground(Color.RED, 20, 1, 1).create();
+            title.setText(spannableStringBuilder);
             Drawable drawable = getResources().getDrawable(R.drawable.abc);
             image.setBackgroundDrawable(drawable);
         }

@@ -15,6 +15,7 @@ import android.support.annotation.DrawableRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.Layout;
+import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
@@ -498,22 +499,16 @@ public class TextSpanUtils {
          */
         private void setSpan() {
             int start = mBuilder.length();
-            int end =0;
+            mBuilder.append(this.text);
+            int end = mBuilder.length();
 
             if (isRoundImageSpan) {//设置 圆角 背景
-                SpannableString spannableString = new SpannableString(text);
-                end = spannableString.length();
                 TagImageSpan tagImageSpan = new TagImageSpan(10, 10);
                 tagImageSpan.setOffsetX(offsetX);
                 tagImageSpan.setOffsetY(offsetY);
-                spannableString.setSpan(tagImageSpan, 0, spannableString.length(), flag);
-                mBuilder.append(spannableString);
+                mBuilder.setSpan(tagImageSpan,start,end, flag);
                 isRoundImageSpan = false;
-            }else {
-                mBuilder.append(this.text);
-                end = mBuilder.length();
             }
-
             if (foregroundColor != defaultValue) {
                 mBuilder.setSpan(new ForegroundColorSpan(foregroundColor), start, end, flag);
                 foregroundColor = defaultValue;
@@ -638,6 +633,7 @@ public class TextSpanUtils {
                 this.expandWidth = expandWidth;
                 this.expandHeight = expandHeight;
             }
+
 
             @Override
             public void draw(Canvas canvas, CharSequence text, int start, int end, float x, int top, int y, int bottom, Paint paint) {
