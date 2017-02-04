@@ -6,6 +6,7 @@ import com.kayo.mutiadapter.ColumnRule;
 import com.kayo.mutiadapter.MutiData;
 import com.kayo.mutiadapter.MutiHolder;
 import com.kayo.mutiadapter.MutiListView;
+import com.kayo.mutiadapter.footer.LoadMoreRule;
 
 import java.util.ArrayList;
 import java.util.HashMap;

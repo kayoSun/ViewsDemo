@@ -1,4 +1,4 @@
-package com.kayo.mutiadapter.rules;
+package com.kayo.mutiadapter.footer;
 
 import android.content.Context;
 import android.view.LayoutInflater;
