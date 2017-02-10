@@ -1,8 +1,10 @@
-package com.kayo.viewsdemo;
+package com.kayo.viewsdemo.view;
 
 import android.content.Context;
 import android.graphics.Canvas;
 import android.util.AttributeSet;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.TextView;
 
 /**
@@ -13,6 +15,7 @@ import android.widget.TextView;
  */
 
 public class EndTextView extends TextView {
+
     public EndTextView(Context context) {
         super(context);
     }

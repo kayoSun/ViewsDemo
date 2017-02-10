@@ -419,14 +419,18 @@ public class MotionLayout extends ViewGroup {
         final int childTop = getPaddingTop() + distance - pushDistance;// 根据偏移量distance更新
         final int childWidth = width - getPaddingLeft() - getPaddingRight();
         final int childHeight = height - getPaddingTop() - getPaddingBottom();
-        child.layout(childLeft, childTop, childLeft + childWidth, childTop
-                + childHeight);// 更新目标View的位置
+        child.layout(childLeft,
+                childTop,
+                childLeft + childWidth,
+                childTop + childHeight);// 更新目标View的位置
         int headViewWidth = headContainer.getMeasuredWidth();
         int headViewHeight = headContainer.getMeasuredHeight();
 
 
-        headContainer.layout((width / 2 - headViewWidth / 2),
-                motionViewOffsetTop, (width / 2 + headViewWidth / 2),
+        headContainer.layout(
+                (width / 2 - headViewWidth / 2),
+                motionViewOffsetTop,
+                (width / 2 + headViewWidth / 2),
                 motionViewOffsetTop + headViewHeight);// 更新头布局的位置
 
         int footerL = 0;
