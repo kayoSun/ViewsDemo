@@ -7,6 +7,9 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.DecelerateInterpolator;
+import android.view.animation.Transformation;
 
 import com.kayo.motionlayout.FooterViewContainer;
 import com.kayo.motionlayout.HeaderViewContainer;
@@ -28,6 +31,9 @@ public class FreshLayout extends ViewGroup {
     private int footerHeight;
     private float startY;
     private int distanceY;
+    private int tempDistanceY;
+    private long ANIMATE_TO_START_DURATION = 200;
+    private DecelerateInterpolator decelerateInterpolator;//在动画开始的地方速率改变比较慢，然后开始减速  差值器
 
     public FreshLayout(Context context) {
         super(context);
@@ -74,6 +80,7 @@ public class FreshLayout extends ViewGroup {
                 resetPosition();
             }
         });
+        decelerateInterpolator = new DecelerateInterpolator();
     }
 
     /**
@@ -152,9 +159,20 @@ public class FreshLayout extends ViewGroup {
                 break;
             case MotionEvent.ACTION_UP:
             case MotionEvent.ACTION_CANCEL:
+                handlActionUp();
                 break;
         }
         return touched;
+    }
+    private boolean handlActionUp(){
+        tempDistanceY = distanceY;
+        toStartPosition.reset();
+        toStartPosition.setDuration(ANIMATE_TO_START_DURATION);
+        toStartPosition.setInterpolator(decelerateInterpolator);
+        headerContainer.clearAnimation();
+        headerContainer.startAnimation(toStartPosition);
+
+        return false;
     }
 
     private boolean handlMoveForPull(MotionEvent event) {
@@ -181,4 +199,16 @@ public class FreshLayout extends ViewGroup {
         distanceY = 0;
         requestLayout();
     }
+
+    private void moveToStart(float percent){
+        System.out.println("FreshLayout --> " + "anim = "+percent);
+        distanceY = tempDistanceY -(int) (tempDistanceY*percent);
+        requestLayout();
+    }
+    private final Animation toStartPosition = new Animation() {
+        @Override
+        public void applyTransformation(float interpolatedTime, Transformation t) {
+            moveToStart(interpolatedTime);
+        }
+    };
 }
