@@ -14,11 +14,10 @@ public class Main2Activity extends AppCompatActivity implements View.OnClickList
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main2);
         view = findViewById(R.id.text);
-        view.setOnClickListener(this);
     }
 
     @Override
     public void onClick(View v) {
-        KartoonToast.toast(this,"测试文案", KartoonToast.LENGTH_LONG,KartoonToast.WARNING);
+        KartoonToast.toast(this,"测试文案", KartoonToast.LENGTH_LONG,KartoonToast.DEFAULT);
     }
 }

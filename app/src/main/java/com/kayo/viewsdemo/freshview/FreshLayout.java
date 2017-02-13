@@ -14,8 +14,6 @@ import android.view.animation.Transformation;
 import com.kayo.motionlayout.FooterViewContainer;
 import com.kayo.motionlayout.HeaderViewContainer;
 
-import java.util.Random;
-
 /**
  * Created by shilei on 17/2/10.
  * <pre>
@@ -30,10 +28,12 @@ public class FreshLayout extends ViewGroup {
     private int footerWidth;
     private int footerHeight;
     private float startY;
-    private int distanceY;
-    private int tempDistanceY;
-    private long ANIMATE_TO_START_DURATION = 200;
+    private int distanceY;//当前view的位置
+    private int tempDistanceY;//当手指抬起时的位置
+    private long ANIMATE_TO_START_DURATION = 200;//返回开始位置时 的动画执行时间
     private DecelerateInterpolator decelerateInterpolator;//在动画开始的地方速率改变比较慢，然后开始减速  差值器
+    private boolean isRefresh;
+    private boolean isLoadmore;
 
     public FreshLayout(Context context) {
         super(context);
@@ -142,8 +142,26 @@ public class FreshLayout extends ViewGroup {
 
     }
 
+
+    /**
+     * 判断是否是顶部或底部
+     * 如果是 返回true
+     * @return 是顶部或底部 返回true
+     */
+    private boolean isTopOrBottom(){
+        return true;
+    }
+
+
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
+        System.out.println("FreshLayout --> " + "dispatchTouchEvent");
+        int action = ev.getAction();
+//        if (action == MotionEvent.ACTION_MOVE){
+//            return !isTopOrBottom();
+//        }else {
+//            return false;
+//        }
         return super.dispatchTouchEvent(ev);
     }
 
@@ -155,39 +173,69 @@ public class FreshLayout extends ViewGroup {
                 startY = event.getRawY();
                 break;
             case MotionEvent.ACTION_MOVE:
-                touched = handlMoveForPull(event);
+                // 如果子View可以滑动，不拦截事件，交给子View处理
+                if (touched = isTopOrBottom()){
+                    handlMoveAction(event);
+                }
                 break;
             case MotionEvent.ACTION_UP:
             case MotionEvent.ACTION_CANCEL:
                 handlActionUp();
+                startY = getY();
+                touched = super.onTouchEvent(event);
                 break;
         }
         return touched;
     }
+
+    //解析手指 抬起动作
     private boolean handlActionUp(){
+        if (isRefresh){
+            notifyRefresh();
+            return false;
+        }
+        if (isLoadmore){
+            notifyLoadMore();
+            return false;
+        }
         tempDistanceY = distanceY;
         toStartPosition.reset();
         toStartPosition.setDuration(ANIMATE_TO_START_DURATION);
         toStartPosition.setInterpolator(decelerateInterpolator);
         headerContainer.clearAnimation();
         headerContainer.startAnimation(toStartPosition);
-
         return false;
     }
 
-    private boolean handlMoveForPull(MotionEvent event) {
+    //解析 拖动动作
+    private boolean handlMoveAction(MotionEvent event) {
         float rawY = event.getRawY();
         float v = rawY - startY;
         distanceY += v;
         if (v>0){
+            isLoadmore = false;
             if (distanceY > headerHeight){
                 distanceY = headerHeight;
+                v = 0;
+            }
+            if (distanceY > headerHeight*.7){
+                isRefresh = true;
+            }else {
+                isRefresh = false;
             }
         }else {
+            isRefresh = false;
             if (distanceY < -footerHeight){
                 distanceY = -footerHeight;
+                v = 0;
+            }
+            if (Math.abs(distanceY) > footerHeight*.7){
+                isLoadmore = true;
+            }else {
+                isLoadmore = false;
             }
         }
+        updateDistance();
         startY = event.getRawY();
         dataView.offsetTopAndBottom((int) v);
         headerContainer.offsetTopAndBottom((int) v);
@@ -201,9 +249,12 @@ public class FreshLayout extends ViewGroup {
     }
 
     private void moveToStart(float percent){
-        System.out.println("FreshLayout --> " + "anim = "+percent);
         distanceY = tempDistanceY -(int) (tempDistanceY*percent);
-        requestLayout();
+        if (percent == 1){
+            resetPosition();
+        }else {
+            requestLayout();
+        }
     }
     private final Animation toStartPosition = new Animation() {
         @Override
@@ -211,4 +262,15 @@ public class FreshLayout extends ViewGroup {
             moveToStart(interpolatedTime);
         }
     };
+
+    private void notifyRefresh(){
+        System.out.println("FreshLayout --> " + "刷新");
+
+    }
+    private void notifyLoadMore(){
+        System.out.println("FreshLayout --> " + "加载更多");
+    }
+    private void updateDistance(){
+
+    }
 }
