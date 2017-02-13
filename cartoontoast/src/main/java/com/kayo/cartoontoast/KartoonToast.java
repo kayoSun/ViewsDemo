@@ -77,29 +77,30 @@ public class KartoonToast {
 
         switch (type) {
             case SUCCESS: {
-                createSuccessView(context, layout, text, cartoonViewContainer, params);
+                createSuccessView(context, text, cartoonViewContainer, params);
                 break;
             }
             case WARNING: {
-                createWarningView(context, layout, text, cartoonViewContainer, params);
+                createWarningView(context, text, cartoonViewContainer, params);
                 break;
             }
             case ERROR: {
-                createErrorView(context, layout, text, cartoonViewContainer, params);
+                createErrorView(context, text, cartoonViewContainer, params);
                 break;
             }
             case INFO: {
-                createInfoView(context, layout, text, cartoonViewContainer, params);
+                createInfoView(context, text, cartoonViewContainer, params);
                 break;
             }
             case DEFAULT: {
-                createDefaultView(context, layout, text, cartoonViewContainer, params);
+                createDefaultView(context, text, cartoonViewContainer, params);
                 break;
             }
             default:
-                createDefaultView(context, layout, text, cartoonViewContainer, params);
+                createDefaultView(context, text, cartoonViewContainer, params);
                 break;
         }
+        toast.setView(layout);
         toast.show();
     }
 
@@ -157,34 +158,31 @@ public class KartoonToast {
         return (int) (dpValue * scale);
     }
 
-    private static void createDefaultView(Context context, View layout, TextView text, LinearLayout cartoonViewContainer, LinearLayout.LayoutParams params) {
+    private static void createDefaultView(Context context, TextView text, LinearLayout cartoonViewContainer, LinearLayout.LayoutParams params) {
         DefaultToastView defaultToastView = new DefaultToastView(context);
         defaultToastView.startAnim();
         text.setBackgroundResource(R.drawable.kartoon_default_toast);
         text.setTextColor(Color.parseColor("#FFFFFF"));
         cartoonViewContainer.addView(defaultToastView, params);
-        toast.setView(layout);
     }
 
-    private static void createInfoView(Context context, View layout, TextView text, LinearLayout cartoonViewContainer, LinearLayout.LayoutParams params) {
+    private static void createInfoView(Context context, TextView text, LinearLayout cartoonViewContainer, LinearLayout.LayoutParams params) {
         InfoToastView infoToastView = new InfoToastView(context);
         infoToastView.startAnim();
         text.setBackgroundResource(R.drawable.kartoon_info_toast);
         text.setTextColor(Color.parseColor("#FFFFFF"));
         cartoonViewContainer.addView(infoToastView, params);
-        toast.setView(layout);
     }
 
-    private static void createErrorView(Context context, View layout, TextView text, LinearLayout cartoonViewContainer, LinearLayout.LayoutParams params) {
+    private static void createErrorView(Context context, TextView text, LinearLayout cartoonViewContainer, LinearLayout.LayoutParams params) {
         ErrorToastView errorToastView = new ErrorToastView(context);
         errorToastView.startAnim();
         text.setBackgroundResource(R.drawable.kartoon_error_toast);
         text.setTextColor(Color.parseColor("#FFFFFF"));
         cartoonViewContainer.addView(errorToastView, params);
-        toast.setView(layout);
     }
 
-    private static void createWarningView(Context context, View layout, TextView text, LinearLayout cartoonViewContainer, LinearLayout.LayoutParams params) {
+    private static void createWarningView(Context context, TextView text, LinearLayout cartoonViewContainer, LinearLayout.LayoutParams params) {
         final WarningToastView warningToastView = new WarningToastView(context);
         SpringSystem springSystem = SpringSystem.create();
         final Spring spring = springSystem.createSpring();
@@ -216,16 +214,14 @@ public class KartoonToast {
         text.setBackgroundResource(R.drawable.kartoon_warning_toast);
         text.setTextColor(Color.parseColor("#FFFFFF"));
         cartoonViewContainer.addView(warningToastView, params);
-        toast.setView(layout);
     }
 
-    private static void createSuccessView(Context context, View layout, TextView text, LinearLayout cartoonViewContainer, LinearLayout.LayoutParams params) {
+    private static void createSuccessView(Context context, TextView text, LinearLayout cartoonViewContainer, LinearLayout.LayoutParams params) {
         SuccessToastView successToastView = new SuccessToastView(context);
         successToastView.startAnim();
         text.setBackgroundResource(R.drawable.kartoon_success_toast);
         text.setTextColor(Color.parseColor("#FFFFFF"));
         cartoonViewContainer.addView(successToastView, params);
-        toast.setView(layout);
     }
 
 
