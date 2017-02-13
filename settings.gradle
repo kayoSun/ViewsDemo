@@ -1,1 +1,1 @@
-include ':app', ':motionlayout', ':mutiimageview', ':develpeutils', ':mutirecyclerview', ':animators_recyclerview'
+include ':app', ':motionlayout', ':mutiimageview', ':develpeutils', ':mutirecyclerview', ':animators_recyclerview', ':cartoontoast'
